@@ -1,15 +1,15 @@
 package com.example.quiz.constants;
 
 /**********************************
- *¥Î©óhard code(µw¥N½X/¼g¦º/©T©w­È)      *
- *  enum¬OµLªknewªº				    *
- * ¦CÁ|...©ñ«eºİ->¼g¦º;©ñ«áºİ->¥i¥H¦Û¥Ñ¼W§R *
+ *ç”¨æ–¼hard code(ç¡¬ä»£ç¢¼/å¯«æ­»/å›ºå®šå€¼)      *
+ *  enumæ˜¯ç„¡æ³•newçš„				    *
+ * åˆ—èˆ‰...æ”¾å‰ç«¯->å¯«æ­»;æ”¾å¾Œç«¯->å¯ä»¥è‡ªç”±å¢åˆª *
  **********************************/
 public enum ResMessage {
 
-//	¦¨¥\©T©w´N¬O200
-//	¦pªG¨S¦³³o¦ê¡Aint dode·|¬O¬õ³L°C
-//	***********¼Ğ·Ç®æ¦¡***********
+//	æˆåŠŸå›ºå®šå°±æ˜¯200
+//	å¦‚æœæ²’æœ‰é€™ä¸²ï¼Œint dodeæœƒæ˜¯ç´…èš¯èš“
+//	***********æ¨™æº–æ ¼å¼***********
 	SUCCESS(200, "Success!!"),//
 	PARAM_QUIZ_NAME_ERROR(400,"Param quiz name error!!"),//
 	PARAM_DESCRIPTION_ERROR(400,"Param Description error!!"),//
@@ -23,7 +23,7 @@ public enum ResMessage {
 	JSON_PROCESSING_EXCEPTION(400,"Json processing exceotion!!"),//
 	DELETE_IS_NULL(400,"delete is null!!"),//
 	UPDATE_ID_NOT_FOUND(404,"update id not found!!"),//
-//	±q¦¹¦æ©¹¤U¶}©l¬O¥Î¤á¶ñ¼gªí³æ
+//	å¾æ­¤è¡Œå¾€ä¸‹é–‹å§‹æ˜¯ç”¨æˆ¶å¡«å¯«è¡¨å–®
 	QUIZ_NOT_FOUND(404,"Quiz not found"),//
 	PARAM_QUIZ_ID_ERROR(400,"Param quiz id error!!"),//
 	PARAM_QUESTION_ID_NOT_FOUND(404,"Param question id not found!!"),//
@@ -44,20 +44,20 @@ public enum ResMessage {
 	;
 
 	
-//	³o¸Ìªºcode«ü200¡B400¡B401¡B403¡B404(½Ğ¨DªºÅv­­)
+//	é€™è£¡çš„codeæŒ‡200ã€400ã€401ã€403ã€404(è«‹æ±‚çš„æ¬Šé™)
 	private int code;
 
 	private String message;
 
-//	³o­Ó«Øºc¤èªk¥D­n¬O¬°¤FSUCCESS¨ú®ø¬õ³L°C
-//	private¬O¨p¦³©Ò¥H¦b³o¸Ì¤]µL¨ä¥L§@¥Î¤F
+//	é€™å€‹å»ºæ§‹æ–¹æ³•ä¸»è¦æ˜¯ç‚ºäº†SUCCESSå–æ¶ˆç´…èš¯èš“
+//	privateæ˜¯ç§æœ‰æ‰€ä»¥åœ¨é€™è£¡ä¹Ÿç„¡å…¶ä»–ä½œç”¨äº†
 	private ResMessage(int code, String message) {
 		this.code = code;
 		this.message = message;
 	}
 
 	
-//	enum¥u·|¥Î¨ìget¡Aset¦b¦¹µL¥Î
+//	enumåªæœƒç”¨åˆ°getï¼Œsetåœ¨æ­¤ç„¡ç”¨
 	public int getCode() {
 		return code;
 	}

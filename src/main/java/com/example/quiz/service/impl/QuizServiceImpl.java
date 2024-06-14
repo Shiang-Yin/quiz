@@ -1,10 +1,6 @@
 package com.example.quiz.service.impl;
 
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import javax.persistence.Column;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,33 +30,33 @@ public class QuizServiceImpl implements QuizService{
 
 	@Override
 	public BasicRes create(CreateReq req) {
-//		ÀË¬d°Ñ¼Æ
+//		æª¢æŸ¥åƒæ•¸
 		BasicRes checkResult = checkParams(req);
-//		¤èªk¤@
-//		checkResult==null®É¡Aªí¥Ü°Ñ¼ÆÀË¬d¥¿½T
+//		æ–¹æ³•ä¸€
+//		checkResult==nullæ™‚ï¼Œè¡¨ç¤ºåƒæ•¸æª¢æŸ¥æ­£ç¢º
 		if(checkResult!=null) {
 			return checkResult;
 		}
-//		¤èªk¤G
+//		æ–¹æ³•äºŒ
 		/*if(checkResult.getCode() != 200) {
 			return checkResult;
 		}*/
 //	=======================================================================	
-//		±NCreateReq¤¤ªºprivate List<Question> questionList;Âà´«¦¨¦r¦ê(String)
-//		¦]¬°¦bQuiz¤¤  @Column(name = "questions")private String questions;¬O¦r¦ê(String)
-//		³z¹L [objectMapper]¥i¥H§âª«¥ó(Ãş§O)Âà­¼json®æ¦¡¦r¦ê
+//		å°‡CreateReqä¸­çš„private List<Question> questionList;è½‰æ›æˆå­—ä¸²(String)
+//		å› ç‚ºåœ¨Quizä¸­  @Column(name = "questions")private String questions;æ˜¯å­—ä¸²(String)
+//		é€é [objectMapper]å¯ä»¥æŠŠç‰©ä»¶(é¡åˆ¥)è½‰ä¹˜jsonæ ¼å¼å­—ä¸²
 		ObjectMapper mapper=new ObjectMapper();
-//		¤@¶}©l¥´³o¦ê¡A·|¦³¬õ³L°C¡A©Ò¥H»İ­ntry/catch¡AÂI¤@¤U´N¥i¥H¦Û°ÊÀ°§Ú­ÌÂà´«¤F
+//		ä¸€é–‹å§‹æ‰“é€™ä¸²ï¼Œæœƒæœ‰ç´…èš¯èš“ï¼Œæ‰€ä»¥éœ€è¦try/catchï¼Œé»ä¸€ä¸‹å°±å¯ä»¥è‡ªå‹•å¹«æˆ‘å€‘è½‰æ›äº†
 //		String questionStr = mapper.writeValueAsString(req.getQuestionList());
 		try {
-//			¦X¨Ö1¡B ±N questionStr±a¤Jquiz¤¤ªºquestionStr¡A¦p54¦æ
+//			åˆä½µ1ã€ å°‡ questionStrå¸¶å…¥quizä¸­çš„questionStrï¼Œå¦‚54è¡Œ
 //			String questionStr = mapper.writeValueAsString(req.getQuestionList());
 //			Quiz quiz=new Quiz(req.getName(),req.getDescription(),req.getStartDate(),
 //					req.getEndDate(),questionStr,req.isPublished());
 			Quiz quiz=new Quiz(req.getName(),req.getDescription(),req.getStartDate(),
 					req.getEndDate(),mapper.writeValueAsString(req.getQuestionList()),
 					req.isPublished());
-//			¦X¨Ö2¡B save¤¤ªºquizª½±µquiz¨º¤@¤j¦ê´À¥N¡A¦p58¦æ
+//			åˆä½µ2ã€ saveä¸­çš„quizç›´æ¥quizé‚£ä¸€å¤§ä¸²æ›¿ä»£ï¼Œå¦‚58è¡Œ
 /*			quizDao.save(new Quiz(req.getName(),req.getDescription(),req.getStartDate(),
 					req.getEndDate(),mapper.writeValueAsString(req.getQuestionList()),
 					req.isPublished()));
@@ -81,10 +77,10 @@ public class QuizServiceImpl implements QuizService{
 	}
 	
 	private BasicRes checkParams(CreateReq req) {
-//		­º¥ı  ¥ıÀË¬d°İ¨÷°Ñ¼Æ
-//		¦]¬°¬OString¡A©Ò¥H¨Ï¥ÎStringUtils.hasText(¦r¦ê)
-//		StringUtils.hasText(¦r¦ê):·|ÀË¬d¦r¦ê¬O§_¬°null¡AªÅ¦r¦ê¡A¥şªÅ¥Õ¦r¦ê¡A­Y¬O²Å¦X3ºØ¨ä¤¤¤@ºØ¡A·|ªğ¦^false
-//		«e­±¥[¤@­Ó [ ! ] :ªí¥Ü¤Ï¦V·N«ä¡A­Y¦r¦êÀË¬dµ²ªG¬Ofalse®É¡A´N·|¶i¤Jifªº¹ê§@°Ï¶ô
+//		é¦–å…ˆ  å…ˆæª¢æŸ¥å•å·åƒæ•¸
+//		å› ç‚ºæ˜¯Stringï¼Œæ‰€ä»¥ä½¿ç”¨StringUtils.hasText(å­—ä¸²)
+//		StringUtils.hasText(å­—ä¸²):æœƒæª¢æŸ¥å­—ä¸²æ˜¯å¦ç‚ºnullï¼Œç©ºå­—ä¸²ï¼Œå…¨ç©ºç™½å­—ä¸²ï¼Œè‹¥æ˜¯ç¬¦åˆ3ç¨®å…¶ä¸­ä¸€ç¨®ï¼Œæœƒè¿”å›false
+//		å‰é¢åŠ ä¸€å€‹ [ ! ] :è¡¨ç¤ºåå‘æ„æ€ï¼Œè‹¥å­—ä¸²æª¢æŸ¥çµæœæ˜¯falseæ™‚ï¼Œå°±æœƒé€²å…¥ifçš„å¯¦ä½œå€å¡Š
 		if(!StringUtils.hasText(req.getName())) {
 			return new BasicRes(ResMessage.PARAM_QUIZ_NAME_ERROR.getCode(),
 					ResMessage.PARAM_QUIZ_NAME_ERROR.getMessage());
@@ -93,35 +89,35 @@ public class QuizServiceImpl implements QuizService{
 			return new BasicRes(ResMessage.PARAM_DESCRIPTION_ERROR.getCode(),
 					ResMessage.PARAM_DESCRIPTION_ERROR.getMessage());
 		}
-//		¶}©l®É¶¡¤£¯à¦b¤µ¤Ñ(§t)¤§«e
-//		(req¤¤ªº¶}©l®É¶¡¤£¯à¦­©ó[isBefore]¤µ¤Ñ(§t[isEqual])¤§«e)¤]¥iª½±µ¥ÎisAfter(¦ı­nª`·N¥ı«á¶¶§Ç)
-//		localDate.new()  ¬O¨ú±o¨t²Î·í«e®É¶¡
-// 		LocalDate.now(): ¨ú±o¨t²Î·í«e®É¶¡
-// 		req.getStartDate().isBefore(LocalDate.now()): ­Y req ¤¤ªº¶}©l®É¶¡"¦­"©ó·í«e®É¶¡¡A·|±o¨ì true
-// 		req.getStartDate().isEqual(LocalDate.now()): ­Y req ¤¤ªº¶}©l®É¶¡"µ¥"©ó·í«e®É¶¡¡A·|±o¨ì true
-// 		¦]¬°¶}©l®É¶¡¤£¯à¦b¤µ¤Ñ(§t)¤§«e¡A©Ò¥H¤W¨â­Ó¤ñ¸û­Y¬O¥ô¤@­Óµ²ªG¬° true¡A«hªí¥Ü¶}©l®É¶¡­n¤ñ·í«e(§t)®É¶¡¦­
-//		req.getStartDate().isAfter(LocalDate.now()) :­Yreq ¤¤¶}©l®É¶¡¤ñ·í«e®É¶¡±ß¡A·|±o¨ìtrue
-//		!req.getStartDate().isAfter(LocalDate.now()):¦b«e­±¥[¤W[ ! ]¡Aªí¥Ü¡A¦pªG·í«e®É¶¡¤ñ·í«e®É¶¡±ß
-//		¡A«h·|±o¨ìfale¡A¦Ó¨ä¥L®É¬q³£¬°true(¤p©ó·í«e®É¶¡ªº)
+//		é–‹å§‹æ™‚é–“ä¸èƒ½åœ¨ä»Šå¤©(å«)ä¹‹å‰
+//		(reqä¸­çš„é–‹å§‹æ™‚é–“ä¸èƒ½æ—©æ–¼[isBefore]ä»Šå¤©(å«[isEqual])ä¹‹å‰)ä¹Ÿå¯ç›´æ¥ç”¨isAfter(ä½†è¦æ³¨æ„å…ˆå¾Œé †åº)
+//		localDate.new()  æ˜¯å–å¾—ç³»çµ±ç•¶å‰æ™‚é–“
+// 		LocalDate.now(): å–å¾—ç³»çµ±ç•¶å‰æ™‚é–“
+// 		req.getStartDate().isBefore(LocalDate.now()): è‹¥ req ä¸­çš„é–‹å§‹æ™‚é–“"æ—©"æ–¼ç•¶å‰æ™‚é–“ï¼Œæœƒå¾—åˆ° true
+// 		req.getStartDate().isEqual(LocalDate.now()): è‹¥ req ä¸­çš„é–‹å§‹æ™‚é–“"ç­‰"æ–¼ç•¶å‰æ™‚é–“ï¼Œæœƒå¾—åˆ° true
+// 		å› ç‚ºé–‹å§‹æ™‚é–“ä¸èƒ½åœ¨ä»Šå¤©(å«)ä¹‹å‰ï¼Œæ‰€ä»¥ä¸Šå…©å€‹æ¯”è¼ƒè‹¥æ˜¯ä»»ä¸€å€‹çµæœç‚º trueï¼Œå‰‡è¡¨ç¤ºé–‹å§‹æ™‚é–“è¦æ¯”ç•¶å‰(å«)æ™‚é–“æ—©
+//		req.getStartDate().isAfter(LocalDate.now()) :è‹¥req ä¸­é–‹å§‹æ™‚é–“æ¯”ç•¶å‰æ™‚é–“æ™šï¼Œæœƒå¾—åˆ°true
+//		!req.getStartDate().isAfter(LocalDate.now()):åœ¨å‰é¢åŠ ä¸Š[ ! ]ï¼Œè¡¨ç¤ºï¼Œå¦‚æœç•¶å‰æ™‚é–“æ¯”ç•¶å‰æ™‚é–“æ™š
+//		ï¼Œå‰‡æœƒå¾—åˆ°faleï¼Œè€Œå…¶ä»–æ™‚æ®µéƒ½ç‚ºtrue(å°æ–¼ç•¶å‰æ™‚é–“çš„)
 		if(req.getStartDate()==null || !req.getStartDate().isAfter(LocalDate.now()) ) {
 			return new BasicRes(ResMessage.PARAM_STARDATE_ERROR.getCode(),
 					ResMessage.PARAM_STARDATE_ERROR.getMessage());
 		}
-//		·íµ{¦¡½X°õ¦æ¦ÜEndDate®É¡Aªí¥ÜStartDate¤@©w¬O¤j©ó·í«e®É¶¡(¨S¦³µ¥©ó³á~)
-//		©Ò¥Hµ²§ô®É¶¡¥u»İ­n¡A§PÂ_¡A¦b¶}©l®É¶¡¤§«á´N¦n(¤j©óµ¥©ó¶}©l®É¶¡)
-//		¶}©l®É¶¡ > ·í«e®É¶¡ ; µ²§ô®É¶¡ >= ¶}©l®É¶¡  ==>  µ²§ô®É¶¡ >= ¶}©l®É¶¡ > ·í«e®É¶¡
-// 		1¡Bµ²§ô®É¶¡¤£¯à¤p©óµ¥©ó·í«e®É¶¡  !req.getEndDate().isAfter(LocalDate.now()) ³o­Ó¥i¥H¬Ù²¤¤£¼g
-//		2¡Bµ²§ô®É¶¡¤£¯à¤p(¦­)©ó¶}©l®É¶¡		
+//		ç•¶ç¨‹å¼ç¢¼åŸ·è¡Œè‡³EndDateæ™‚ï¼Œè¡¨ç¤ºStartDateä¸€å®šæ˜¯å¤§æ–¼ç•¶å‰æ™‚é–“(æ²’æœ‰ç­‰æ–¼å–”~)
+//		æ‰€ä»¥çµæŸæ™‚é–“åªéœ€è¦ï¼Œåˆ¤æ–·ï¼Œåœ¨é–‹å§‹æ™‚é–“ä¹‹å¾Œå°±å¥½(å¤§æ–¼ç­‰æ–¼é–‹å§‹æ™‚é–“)
+//		é–‹å§‹æ™‚é–“ > ç•¶å‰æ™‚é–“ ; çµæŸæ™‚é–“ >= é–‹å§‹æ™‚é–“  ==>  çµæŸæ™‚é–“ >= é–‹å§‹æ™‚é–“ > ç•¶å‰æ™‚é–“
+// 		1ã€çµæŸæ™‚é–“ä¸èƒ½å°æ–¼ç­‰æ–¼ç•¶å‰æ™‚é–“  !req.getEndDate().isAfter(LocalDate.now()) é€™å€‹å¯ä»¥çœç•¥ä¸å¯«
+//		2ã€çµæŸæ™‚é–“ä¸èƒ½å°(æ—©)æ–¼é–‹å§‹æ™‚é–“		
 		if(req.getEndDate()==null || req.getEndDate().isBefore(req.getStartDate())) {
 			return new BasicRes(ResMessage.PARAM_ENDDATE_ERROR.getCode(),
 					ResMessage.PARAM_ENDDATE_ERROR.getMessage());
 		}
-//		ÀË¬d°İÃDªº°Ñ¼Æ
+//		æª¢æŸ¥å•é¡Œçš„åƒæ•¸
 		if(CollectionUtils.isEmpty(req.getQuestionList())) {
 			return new BasicRes(ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getCode(),
 					ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getMessage());
 		}
-//		¤@±i°İ¨÷¥i¯à·|¦³¦h­Ó°İÃD¡A©Ò¥H­n³v»óÀË¬d¨C¤@ÃDªº°Ñ¼Æ(©Ò¥H¥Îfor)
+//		ä¸€å¼µå•å·å¯èƒ½æœƒæœ‰å¤šå€‹å•é¡Œï¼Œæ‰€ä»¥è¦é€é¼»æª¢æŸ¥æ¯ä¸€é¡Œçš„åƒæ•¸(æ‰€ä»¥ç”¨for)
 		for(Question item:req.getQuestionList()) {
 			if(item.getId()<=0) {
 				return new BasicRes(ResMessage.PARAM_QUESTION_ID_ERROR.getCode(),
@@ -139,9 +135,9 @@ public class QuizServiceImpl implements QuizService{
 				return new BasicRes(ResMessage.PARAM_QUESTION_TYPE_ERROR.getCode(),
 						ResMessage.PARAM_QUESTION_TYPE_ERROR.getMessage());
 			}
-//			type¤w¸g¦³°µ°ò¥»ÀË¬d¤F¡A¦ı§Ú­Ì·|¦]¬°Ãş«¬¤£¦P¦Óoption¤]·|¦³©Ò¤£¦P
-//			·íOption_type ¬O³æ¿ï©Î¦h¿ï®É¡Aoption´N¤£¯à¬OªÅ¦r¦ê(¥H¤UÀË¬d³æ/¦h¿ï±ø¥ó¤U¡A¦p¬°ªÅ¦r¦êªğ¦^¿ù»~)
-//			¦ı·íoption_type¬O¤å¦r®É¡A«h¤¹³\ªÅ¦r¦ê
+//			typeå·²ç¶“æœ‰åšåŸºæœ¬æª¢æŸ¥äº†ï¼Œä½†æˆ‘å€‘æœƒå› ç‚ºé¡å‹ä¸åŒè€Œoptionä¹Ÿæœƒæœ‰æ‰€ä¸åŒ
+//			ç•¶Option_type æ˜¯å–®é¸æˆ–å¤šé¸æ™‚ï¼Œoptionå°±ä¸èƒ½æ˜¯ç©ºå­—ä¸²(ä»¥ä¸‹æª¢æŸ¥å–®/å¤šé¸æ¢ä»¶ä¸‹ï¼Œå¦‚ç‚ºç©ºå­—ä¸²è¿”å›éŒ¯èª¤)
+//			ä½†ç•¶option_typeæ˜¯æ–‡å­—æ™‚ï¼Œå‰‡å…è¨±ç©ºå­—ä¸²
 			if(item.getType().equals(OptionType.SINGLE_CHOICE.getType())
 					|| item.getType().equals(OptionType.MULIT_CHOICE.getType())) {
 				if(!StringUtils.hasText(item.getOptions())) {
@@ -149,8 +145,8 @@ public class QuizServiceImpl implements QuizService{
 							ResMessage.PARAM_QUESTION_CONTENT_ERROR.getMessage());
 				}
 			}
-//			¤]¥i³o¼Ë¼g(³æ¿ï¦h¿ïªº±ø¥óÀË¬d)  ±ø¥ó¤@¦¨¥ß®É¡A±ø¥ó¤G¤]¦¨¥ß(©Ò¥H­nª`·N±ø¥ó¤@ªº()¥H¤Î±ø¥ó¤Gªº&&)
-//		  ********   ( ±ø¥ó¤@(1) || ±ø¥ó¤@(2) ) &&±ø¥ó¤G   **************
+//			ä¹Ÿå¯é€™æ¨£å¯«(å–®é¸å¤šé¸çš„æ¢ä»¶æª¢æŸ¥)  æ¢ä»¶ä¸€æˆç«‹æ™‚ï¼Œæ¢ä»¶äºŒä¹Ÿæˆç«‹(æ‰€ä»¥è¦æ³¨æ„æ¢ä»¶ä¸€çš„()ä»¥åŠæ¢ä»¶äºŒçš„&&)
+//		  ********   ( æ¢ä»¶ä¸€(1) || æ¢ä»¶ä¸€(2) ) &&æ¢ä»¶äºŒ   **************
 /*		if( ( item.getType().equals(OptionType.SINGLE_CHOICE.getType())
 					|| item.getType().equals(OptionType.MULIT_CHOICE.getType()) )
 					&& !StringUtils.hasText(item.getOptions()) ) {
@@ -163,27 +159,27 @@ public class QuizServiceImpl implements QuizService{
  */
 			
 		}
-//		¤èªk¤@
+//		æ–¹æ³•ä¸€
 		return null;
-//		¤èªk¤G
+//		æ–¹æ³•äºŒ
 		/*return new BasicRes(ResMessage.SUCCESS.getCode(),
 				ResMessage.SUCCESS.getMessage());*/
 	}
 
 //	=================================================================
-// *****************¶i***********¤J***********·j*********¯Á******************
+// *****************é€²***********å…¥***********æœ*********ç´¢******************
 	@Override
 	public SearchRes search(SearchReq req) {
 		
-//		¥ı§âlist¤¤ªº­È´£¥X¨Ó
+//		å…ˆæŠŠlistä¸­çš„å€¼æå‡ºä¾†
 		String name=req.getName();
 		LocalDate start=req.getStartDate();
 		LocalDate end=req.getEndDate();
-//		´£¥X«á¦A°µÀË¬d
+//		æå‡ºå¾Œå†åšæª¢æŸ¥
 		if(!StringUtils.hasText(name)) {
-			//­n½T«O¦W¦r¤@©w¬OªÅ¦r¦ê¡A¤£¯à¦³¥şªÅ¥Õ¦r¦ê©Înull¡A±N¦¹µø¬°"¨S¦³¿é¤J±ø¥ó­È"
-			//©Ò¥H±N¥¦­Ì³£Âà´«¬°ªÅ¦r¦ê""¡A¨Ã·j´M¥ş³¡¸ê°T
-//			JPAªºcontainingªº¤èªk¡A±ø¥ó­È¬OªÅ¦r¦ê®É¡A·|·j¯Á¥ş³¡
+			//è¦ç¢ºä¿åå­—ä¸€å®šæ˜¯ç©ºå­—ä¸²ï¼Œä¸èƒ½æœ‰å…¨ç©ºç™½å­—ä¸²æˆ–nullï¼Œå°‡æ­¤è¦–ç‚º"æ²’æœ‰è¼¸å…¥æ¢ä»¶å€¼"
+			//æ‰€ä»¥å°‡å®ƒå€‘éƒ½è½‰æ›ç‚ºç©ºå­—ä¸²""ï¼Œä¸¦æœå°‹å…¨éƒ¨è³‡è¨Š
+//			JPAçš„containingçš„æ–¹æ³•ï¼Œæ¢ä»¶å€¼æ˜¯ç©ºå­—ä¸²æ™‚ï¼Œæœƒæœç´¢å…¨éƒ¨
 			name="";
 		}
 		
@@ -201,92 +197,92 @@ public class QuizServiceImpl implements QuizService{
 
 	@Override
 	public BasicRes delete(DeleteReq req) {
-//		ÀË¬d°Ñ¼Æ
-//		¦]¬°¬O¶°¦X(list)¡A©Ò¥H­nÀË¬d®É­n¨Ï¥ÎCollectionUtils
+//		æª¢æŸ¥åƒæ•¸
+//		å› ç‚ºæ˜¯é›†åˆ(list)ï¼Œæ‰€ä»¥è¦æª¢æŸ¥æ™‚è¦ä½¿ç”¨CollectionUtils
 		
 		/*
 		if(CollectionUtils.isEmpty(req.getIdList())) {
 			return new BasicRes(ResMessage.DELETE_IS_NULL.getCode(),
 					ResMessage.DELETE_IS_NULL.getMessage());
 		}
-//		§R°£°İ¨÷
+//		åˆªé™¤å•å·
 		quizDao.deleteAllById(req.getIdList());
 		return new BasicRes(ResMessage.SUCCESS.getCode(),
 				ResMessage.SUCCESS.getMessage());
 				
 				*/
 		
-//		¥t¸Ñ
+//		å¦è§£
 		
 		if(!CollectionUtils.isEmpty(req.getIdList())) {
 			try {
-//				§R°£°İ¨÷
+//				åˆªé™¤å•å·
 				quizDao.deleteAllById(req.getIdList());
 			}catch(Exception e){
-				//·ídeleteAllById¤èªk¤¤¡Aidªº­È¤£¦s¦b®É¡Ajpa·|³ø¿ù
-				//¦]¬°§R°£¤§«e¡AJPA·|¥ı"·j¯Á"±a¤Jªºid¡A¦A¥h°µ§R°£ªº°Ê§@(©Ò¥H¦pªG¨S¦³·j¯Á¨ì´N·|³ø¿ù)
-				//¦ı¦]¹ê»Ú¤W¤]¨S§R°£¥ô¦ó¸ê°T¡A©Ò¥H¤]´N¥i¥H¤£»İ­n³o­Óexception°µ³B²z
+				//ç•¶deleteAllByIdæ–¹æ³•ä¸­ï¼Œidçš„å€¼ä¸å­˜åœ¨æ™‚ï¼Œjpaæœƒå ±éŒ¯
+				//å› ç‚ºåˆªé™¤ä¹‹å‰ï¼ŒJPAæœƒå…ˆ"æœç´¢"å¸¶å…¥çš„idï¼Œå†å»åšåˆªé™¤çš„å‹•ä½œ(æ‰€ä»¥å¦‚æœæ²’æœ‰æœç´¢åˆ°å°±æœƒå ±éŒ¯)
+				//ä½†å› å¯¦éš›ä¸Šä¹Ÿæ²’åˆªé™¤ä»»ä½•è³‡è¨Šï¼Œæ‰€ä»¥ä¹Ÿå°±å¯ä»¥ä¸éœ€è¦é€™å€‹exceptionåšè™•ç†
 			}
 		}
-//		¦]¬°(1)µL§R°£¸ê®Æ(null)(2)¿é¤J¤F¸ê®Æ¤£¦s¦bªºid   ¡A³£¤£·|¤s¨ì¥ô¦ó¸ê°T¡A©Ò¥H¥i¥Hºâ¬O¦¨¥\
+//		å› ç‚º(1)ç„¡åˆªé™¤è³‡æ–™(null)(2)è¼¸å…¥äº†è³‡æ–™ä¸å­˜åœ¨çš„id   ï¼Œéƒ½ä¸æœƒå±±åˆ°ä»»ä½•è³‡è¨Šï¼Œæ‰€ä»¥å¯ä»¥ç®—æ˜¯æˆåŠŸ
 		return new BasicRes(ResMessage.SUCCESS.getCode(),
 				ResMessage.SUCCESS.getMessage());
 		
 	}
 
 //	====================================================================================
-//	*************·s************¼W**********©Î************§ó***********·s*******************
-//	³o¬q¥i¥H³»±¼¤W­±ªºcreate
+//	*************æ–°************å¢**********æˆ–************æ›´***********æ–°*******************
+//	é€™æ®µå¯ä»¥é ‚æ‰ä¸Šé¢çš„create
 	@Override
 	public BasicRes updateOrCreate(updateOrCreateReq req) {
-//		ÀË¬d°Ñ¼Æ
+//		æª¢æŸ¥åƒæ•¸
 		BasicRes checkResult = checkParams(req);
-//		¤èªk¤@
-//		checkResult==null®É¡Aªí¥Ü°Ñ¼ÆÀË¬d¥¿½T
+//		æ–¹æ³•ä¸€
+//		checkResult==nullæ™‚ï¼Œè¡¨ç¤ºåƒæ•¸æª¢æŸ¥æ­£ç¢º
 		if(checkResult!=null) {
 			return checkResult;
 		}
-		/* ObjectMapper mapper=new ObjectMapper();  ³o¬q´X¥G©T©w¤£ÅÜªº
-		 * ºÉ¶q"¤£­n"¦b¨C¦¸§Ç¦C¤Æ/¤Ï§Ç¦C¤Æ¨Ï¥Î®É³£ new ObjectMapper();¡A³o¼Ëªº¥N»ù¬O©ù¶Qªº¡A
-		 * ¤ñ°_¦@¥Î¦P¤@­Ó¹ê¨Ò¡A¨âªÌªº®Ä¯à¥i¥H¬Û®t«Ü¦h­¿¡C
-		 * ObjectMapper ¬O thread-safe ªºª«¥ó ¡A¥Î©óª«¥óªºÂà´«
+		/* ObjectMapper mapper=new ObjectMapper();  é€™æ®µå¹¾ä¹å›ºå®šä¸è®Šçš„
+		 * ç›¡é‡"ä¸è¦"åœ¨æ¯æ¬¡åºåˆ—åŒ–/ååºåˆ—åŒ–ä½¿ç”¨æ™‚éƒ½ new ObjectMapper();ï¼Œé€™æ¨£çš„ä»£åƒ¹æ˜¯æ˜‚è²´çš„ï¼Œ
+		 * æ¯”èµ·å…±ç”¨åŒä¸€å€‹å¯¦ä¾‹ï¼Œå…©è€…çš„æ•ˆèƒ½å¯ä»¥ç›¸å·®å¾ˆå¤šå€ã€‚
+		 * ObjectMapper æ˜¯ thread-safe çš„ç‰©ä»¶ ï¼Œç”¨æ–¼ç‰©ä»¶çš„è½‰æ›
 		 */
-		//¬ÛÃö¥Îªk¥i¸Ô¾\¤U­±³sµ²ºô§}ªº¤º®e:
+		//ç›¸é—œç”¨æ³•å¯è©³é–±ä¸‹é¢é€£çµç¶²å€çš„å…§å®¹:
 		//https://blog.csdn.net/u011213044/article/details/120329436
 		ObjectMapper mapper=new ObjectMapper();
 		try {
-			//.writeValueAsString   : ±N¸ê®ÆÂà¦¨¦r¦ê«¬ºA
+			//.writeValueAsString   : å°‡è³‡æ–™è½‰æˆå­—ä¸²å‹æ…‹
 			String questionStr=mapper.writeValueAsString(req.getQuestionList());
 			
 //			Quiz quiz = new Quiz(req.getName(),req.getDescription(),
 //					req.getStartDate(),req.getEndDate(),
-//					questionStr,req.isPublished());    //¼gªk1
+//					questionStr,req.isPublished());    //å¯«æ³•1
 			
 			if(req.getId()>0) {    
-				// ¥i¥H»Pboo¦X¨Ö¡AÅÜ¦¨  ¤@¬q
+				// å¯ä»¥èˆ‡booåˆä½µï¼Œè®Šæˆ  ä¸€æ®µ
 				// if(req.getId()>0 && !quizDao.existsById(req.getId())) {
 				// return new BasicRes(ResMessage.UPDATE_ID_NOT_FOUND.getCode(),
 				// ResMessage.UPDATE_ID_NOT_FOUND.getMessage());
 				// }
 //  *************************************************************************************
-//		¥H¤U¨âºØ¤è¦¡¾Ü¤@(findById»PexistsById)
-//		¨Ï¥Î¤èªk¤@(1¡BfindById) ¡A¤J¦³¸ê®Æ¡A·|¦^¶Ç¤@¾ãµ§ªº¸ê®Æ(¥i¯à¸ê®Æ¶q·|¸ûÃe¤j)
-//		¨Ï¥Î¤èªk¤G(2¡BexistsById) ¡A¦]¬°³z¹LexistsById¨Ó§PÂ_¦s¤£¦s¦b¡A©Ò¥H¦^¶Çªº¸ê®Æ¥Ã»·³£¥u·|¬O¤@­Óbit(0(false)/1(true))
+//		ä»¥ä¸‹å…©ç¨®æ–¹å¼æ“‡ä¸€(findByIdèˆ‡existsById)
+//		ä½¿ç”¨æ–¹æ³•ä¸€(1ã€findById) ï¼Œå…¥æœ‰è³‡æ–™ï¼Œæœƒå›å‚³ä¸€æ•´ç­†çš„è³‡æ–™(å¯èƒ½è³‡æ–™é‡æœƒè¼ƒé¾å¤§)
+//		ä½¿ç”¨æ–¹æ³•äºŒ(2ã€existsById) ï¼Œå› ç‚ºé€éexistsByIdä¾†åˆ¤æ–·å­˜ä¸å­˜åœ¨ï¼Œæ‰€ä»¥å›å‚³çš„è³‡æ–™æ°¸é éƒ½åªæœƒæ˜¯ä¸€å€‹bit(0(false)/1(true))
 //	**************************************************************************************
 				
-				//1¡B³z¹LfindById Àò±o¬°¤@­È(PK)  ¡A­Y¦³­È«h¦^¶Ç¾ãµ§¸ê®Æ
+				//1ã€é€éfindById ç²å¾—ç‚ºä¸€å€¼(PK)  ï¼Œè‹¥æœ‰å€¼å‰‡å›å‚³æ•´ç­†è³‡æ–™
 				/*----------------------------------
-				 * ¦]¬°«h¤@¡A©Ò¥H±N¤èªk¤@¥ıµù¸Ñ±¼
+				 * å› ç‚ºå‰‡ä¸€ï¼Œæ‰€ä»¥å°‡æ–¹æ³•ä¸€å…ˆè¨»è§£æ‰
 				Optional<Quiz> op=quizDao.findById(req.getId());
-				//§PÂ_¬O§_¦³¸ê®Æ
+				//åˆ¤æ–·æ˜¯å¦æœ‰è³‡æ–™
 				if(op.isEmpty()) {
 					return new BasicRes(ResMessage.UPDATE_ID_NOT_FOUND.getCode(),
 							ResMessage.UPDATE_ID_NOT_FOUND.getMessage());
 				}
 				
 				Quiz quiz=op.get();
-				//³]©w·s­È(­È±qreq¨Ó)
-				//¤èªk1:±Nreq¤¤ªº·s­È³]©w¨ìÂÂªºquiz¤¤¡A¤£³]©wid¡A¦]¬°id¤@¼Ë
+				//è¨­å®šæ–°å€¼(å€¼å¾reqä¾†)
+				//æ–¹æ³•1:å°‡reqä¸­çš„æ–°å€¼è¨­å®šåˆ°èˆŠçš„quizä¸­ï¼Œä¸è¨­å®šidï¼Œå› ç‚ºidä¸€æ¨£
 				
 				quiz.setName(req.getName());
 				quiz.setDescription(req.getDescription());
@@ -296,26 +292,26 @@ public class QuizServiceImpl implements QuizService{
 				quiz.setPublished(req.isPublished());
 				--------------------------------------------*/
 				
-				//2¡B ³z¹LexistsById:¦^¶Ç¤@­Óbitªº­È
+				//2ã€ é€éexistsById:å›å‚³ä¸€å€‹bitçš„å€¼
 //				boolean boo = quizDao.existsById(req.getId());
-//				//¦pªGboo¤£¦s¦b¡A«h¤Ï¶ÇµLid
-				//³oÃä­n§PÂ_±qreq±a¶i¨Óªºid¬O§_¯uªº¦s¦b©óob¤¤
-				//­Y¤£¦s¦b¡A«áÄòµ{¦¡½X¦b¥G«Njpaªºsave¤èªk®É·|ÅÜ¦¨·s¼W
-				//(¤£¼g³o¬q¡A¦b«áÄòªº¾Ş§@¤¤¡A§ä¤£¨ì®É¥i¯à·|³£ª½±µ·s¼W¡A¦Ó¨S¦³ªı¤î§Ú­ÌÄ~Äò¾Ş§@)
+//				//å¦‚æœbooä¸å­˜åœ¨ï¼Œå‰‡åå‚³ç„¡id
+				//é€™é‚Šè¦åˆ¤æ–·å¾reqå¸¶é€²ä¾†çš„idæ˜¯å¦çœŸçš„å­˜åœ¨æ–¼obä¸­
+				//è‹¥ä¸å­˜åœ¨ï¼Œå¾ŒçºŒç¨‹å¼ç¢¼åœ¨ä¹ä¿jpaçš„saveæ–¹æ³•æ™‚æœƒè®Šæˆæ–°å¢
+				//(ä¸å¯«é€™æ®µï¼Œåœ¨å¾ŒçºŒçš„æ“ä½œä¸­ï¼Œæ‰¾ä¸åˆ°æ™‚å¯èƒ½æœƒéƒ½ç›´æ¥æ–°å¢ï¼Œè€Œæ²’æœ‰é˜»æ­¢æˆ‘å€‘ç¹¼çºŒæ“ä½œ)
 				if(!quizDao.existsById(req.getId())) {
 					return new BasicRes(ResMessage.UPDATE_ID_NOT_FOUND.getCode(),
 							ResMessage.UPDATE_ID_NOT_FOUND.getMessage());
 				}
-//				quiz.setId(req.getId()); //¼gªk1
+//				quiz.setId(req.getId()); //å¯«æ³•1
 			}	
-				//¤èªk2:¦]¬°¬Onew¤@­Ó·sªºquiz¡A©Ò¥H­n§âid©ñ¶i¥h
+				//æ–¹æ³•2:å› ç‚ºæ˜¯newä¸€å€‹æ–°çš„quizï¼Œæ‰€ä»¥è¦æŠŠidæ”¾é€²å»
 			
-			//¼gªk2
-			//³o¼Ë¼gªk¬O¦]¬° SQL³£¥ı¶i¦æ·j¯Á(select)¬İ¬İ¬O§_¦³id¦s¦b©óOB¤¤¡A¦pªG¦³´N³w¦æÅÜ§ó¡A¦pªG¨S¦³´N·s¼W
+			//å¯«æ³•2
+			//é€™æ¨£å¯«æ³•æ˜¯å› ç‚º SQLéƒ½å…ˆé€²è¡Œæœç´¢(select)çœ‹çœ‹æ˜¯å¦æœ‰idå­˜åœ¨æ–¼OBä¸­ï¼Œå¦‚æœæœ‰å°±é€•è¡Œè®Šæ›´ï¼Œå¦‚æœæ²’æœ‰å°±æ–°å¢
 			Quiz quiz = new Quiz(req.getId(),req.getName(),req.getDescription(),
 					req.getStartDate(),req.getEndDate(),
-					questionStr,req.isPublished());   //²¾¨ìif¤W­±  
-			//jpa³o¸Ìªºsave¥i¥H¦P®É°µ¨ì·s¼W»P§ó·s(³£·|¥ı¶i¦æ·j¯Á¦A§@«áÄò·s¼W/·s¼W)
+					questionStr,req.isPublished());   //ç§»åˆ°ifä¸Šé¢  
+			//jpaé€™è£¡çš„saveå¯ä»¥åŒæ™‚åšåˆ°æ–°å¢èˆ‡æ›´æ–°(éƒ½æœƒå…ˆé€²è¡Œæœç´¢å†ä½œå¾ŒçºŒæ–°å¢/æ–°å¢)
 			quizDao.save(quiz);
 				
 		} catch (JsonProcessingException e) {
@@ -328,7 +324,7 @@ public class QuizServiceImpl implements QuizService{
 	}
 	
 	private BasicRes checkParams(updateOrCreateReq req) {
-//		­º¥ı  ¥ıÀË¬d°İ¨÷°Ñ¼Æ
+//		é¦–å…ˆ  å…ˆæª¢æŸ¥å•å·åƒæ•¸
 		if(!StringUtils.hasText(req.getName())) {
 			return new BasicRes(ResMessage.PARAM_QUIZ_NAME_ERROR.getCode(),
 					ResMessage.PARAM_QUIZ_NAME_ERROR.getMessage());
@@ -337,23 +333,23 @@ public class QuizServiceImpl implements QuizService{
 			return new BasicRes(ResMessage.PARAM_DESCRIPTION_ERROR.getCode(),
 					ResMessage.PARAM_DESCRIPTION_ERROR.getMessage());
 		}
-//		¶}©l®É¶¡¤£¯à¦b¤µ¤Ñ(§t)¤§«e
-//		(req¤¤ªº¶}©l®É¶¡¤£¯à¦­©ó[isBefore]¤µ¤Ñ(§t[isEqual])¤§«e)¤]¥iª½±µ¥ÎisAfter(¦ı­nª`·N¥ı«á¶¶§Ç)
+//		é–‹å§‹æ™‚é–“ä¸èƒ½åœ¨ä»Šå¤©(å«)ä¹‹å‰
+//		(reqä¸­çš„é–‹å§‹æ™‚é–“ä¸èƒ½æ—©æ–¼[isBefore]ä»Šå¤©(å«[isEqual])ä¹‹å‰)ä¹Ÿå¯ç›´æ¥ç”¨isAfter(ä½†è¦æ³¨æ„å…ˆå¾Œé †åº)
 		if(req.getStartDate()==null || !req.getStartDate().isAfter(LocalDate.now()) ) {
 			return new BasicRes(ResMessage.PARAM_STARDATE_ERROR.getCode(),
 					ResMessage.PARAM_STARDATE_ERROR.getMessage());
 		}
-//		ÀË¬dµ²§ô®É¶¡
+//		æª¢æŸ¥çµæŸæ™‚é–“
 		if(req.getEndDate()==null || req.getEndDate().isBefore(req.getStartDate())) {
 			return new BasicRes(ResMessage.PARAM_ENDDATE_ERROR.getCode(),
 					ResMessage.PARAM_ENDDATE_ERROR.getMessage());
 		}
-//		ÀË¬d°İÃDªº°Ñ¼Æ
+//		æª¢æŸ¥å•é¡Œçš„åƒæ•¸
 		if(CollectionUtils.isEmpty(req.getQuestionList())) {
 			return new BasicRes(ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getCode(),
 					ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getMessage());
 		}
-//		¤@±i°İ¨÷¥i¯à·|¦³¦h­Ó°İÃD¡A©Ò¥H­n³v»óÀË¬d¨C¤@ÃDªº°Ñ¼Æ(©Ò¥H¥Îfor)
+//		ä¸€å¼µå•å·å¯èƒ½æœƒæœ‰å¤šå€‹å•é¡Œï¼Œæ‰€ä»¥è¦é€é¼»æª¢æŸ¥æ¯ä¸€é¡Œçš„åƒæ•¸(æ‰€ä»¥ç”¨for)
 		for(Question item:req.getQuestionList()) {
 			if(item.getId()<=0) {
 				return new BasicRes(ResMessage.PARAM_QUESTION_ID_ERROR.getCode(),
@@ -371,9 +367,9 @@ public class QuizServiceImpl implements QuizService{
 				return new BasicRes(ResMessage.PARAM_QUESTION_TYPE_ERROR.getCode(),
 						ResMessage.PARAM_QUESTION_TYPE_ERROR.getMessage());
 			}
-//			type¤w¸g¦³°µ°ò¥»ÀË¬d¤F¡A¦ı§Ú­Ì·|¦]¬°Ãş«¬¤£¦P¦Óoption¤]·|¦³©Ò¤£¦P
-//			·íOption_type ¬O³æ¿ï©Î¦h¿ï®É¡Aoption´N¤£¯à¬OªÅ¦r¦ê(¥H¤UÀË¬d³æ/¦h¿ï±ø¥ó¤U¡A¦p¬°ªÅ¦r¦êªğ¦^¿ù»~)
-//			¦ı·íoption_type¬O¤å¦r®É¡A«h¤¹³\ªÅ¦r¦ê
+//			typeå·²ç¶“æœ‰åšåŸºæœ¬æª¢æŸ¥äº†ï¼Œä½†æˆ‘å€‘æœƒå› ç‚ºé¡å‹ä¸åŒè€Œoptionä¹Ÿæœƒæœ‰æ‰€ä¸åŒ
+//			ç•¶Option_type æ˜¯å–®é¸æˆ–å¤šé¸æ™‚ï¼Œoptionå°±ä¸èƒ½æ˜¯ç©ºå­—ä¸²(ä»¥ä¸‹æª¢æŸ¥å–®/å¤šé¸æ¢ä»¶ä¸‹ï¼Œå¦‚ç‚ºç©ºå­—ä¸²è¿”å›éŒ¯èª¤)
+//			ä½†ç•¶option_typeæ˜¯æ–‡å­—æ™‚ï¼Œå‰‡å…è¨±ç©ºå­—ä¸²
 			if(item.getType().equals(OptionType.SINGLE_CHOICE.getType())
 					|| item.getType().equals(OptionType.MULIT_CHOICE.getType())) {
 				if(!StringUtils.hasText(item.getOptions())) {

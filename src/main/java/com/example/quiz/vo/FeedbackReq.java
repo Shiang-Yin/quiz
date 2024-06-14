@@ -2,7 +2,7 @@ package com.example.quiz.vo;
 
 public class FeedbackReq {
 
-//	°İ¨÷id
+//	å•å·id
 	private int quizId;
 
 	public FeedbackReq() {

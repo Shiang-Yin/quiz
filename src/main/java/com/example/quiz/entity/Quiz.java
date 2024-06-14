@@ -14,16 +14,16 @@ import javax.persistence.Table;
 public class Quiz {
 
 	/**
-	 * ·íÄİ©Ê¬OIntegerªº®É­Ô¡A¥²¥[@GeneratedValue ¦ı¦pªGÄİ©Ê¬Oint®É¡A¥i¥[¥i¤£¥[¡A¦ı...
-	 * ¦pªG¨S¥[¡A·í§Ú¦btest¤¤save®É¡A¥L¤£·|¦^¶Ç¨ì³o¸Ì(¦ısql¸ê®Æ¨Ì¼Ë·|ÅÜ§ó) ¥[¤F¡A¤~·|¦^¶Ç ©Ò¥H³q±`³£·|¥[¤W@GeneratedValue
+	 * ç•¶å±¬æ€§æ˜¯Integerçš„æ™‚å€™ï¼Œå¿…åŠ @GeneratedValue ä½†å¦‚æœå±¬æ€§æ˜¯intæ™‚ï¼Œå¯åŠ å¯ä¸åŠ ï¼Œä½†...
+	 * å¦‚æœæ²’åŠ ï¼Œç•¶æˆ‘åœ¨testä¸­saveæ™‚ï¼Œä»–ä¸æœƒå›å‚³åˆ°é€™è£¡(ä½†sqlè³‡æ–™ä¾æ¨£æœƒè®Šæ›´) åŠ äº†ï¼Œæ‰æœƒå›å‚³ æ‰€ä»¥é€šå¸¸éƒ½æœƒåŠ ä¸Š@GeneratedValue
 	 */
 
-//	¥u­nsql¤¤¦³¨Ï¥Î¨ìAI(Auto Incrememtal¦Û°Ê¥Í¦¨½s½X(idÁöµM¥i¥H¦Û°Ê¥Í¦¨¡A¦ı§Ú­Ì¤]¥i¥H¦Û¤v¦Û­q¸q))¡A
-//	´N±o­n@GeneratedValue³o¬q
-//	AI¥u¯à¨Ï¥Î¦b¨ã¦³pkªº¨­¤W¡A¥B¤@­Óªí³æ¥u¯à¦³¤@­Ó¤Ä¿ïAI¡A¥BÃş«¬¤@©w­n¬Oint(¼Æ¦r)
-//	strategy:«üAIªº¥Í¦¨µ¦²¤
-//	GenerationType.IDENTITY:¥NªíPK¼Æ¦r¥Ñ¸ê®Æ¨Ó¦Û°Ê¼W¥[
-//	¤°»ò®É­Ô­n¥Î¨ìAI?  ·í§Ú±o"idµL·N¸q"ªº®É­Ô¡A³æ¯Â¥u°µ¬y¤ô¸¹ªº®É­Ô
+//	åªè¦sqlä¸­æœ‰ä½¿ç”¨åˆ°AI(Auto Incrememtalè‡ªå‹•ç”Ÿæˆç·¨ç¢¼(idé›–ç„¶å¯ä»¥è‡ªå‹•ç”Ÿæˆï¼Œä½†æˆ‘å€‘ä¹Ÿå¯ä»¥è‡ªå·±è‡ªè¨‚ç¾©))ï¼Œ
+//	å°±å¾—è¦@GeneratedValueé€™æ®µ
+//	AIåªèƒ½ä½¿ç”¨åœ¨å…·æœ‰pkçš„èº«ä¸Šï¼Œä¸”ä¸€å€‹è¡¨å–®åªèƒ½æœ‰ä¸€å€‹å‹¾é¸AIï¼Œä¸”é¡å‹ä¸€å®šè¦æ˜¯int(æ•¸å­—)
+//	strategy:æŒ‡AIçš„ç”Ÿæˆç­–ç•¥
+//	GenerationType.IDENTITY:ä»£è¡¨PKæ•¸å­—ç”±è³‡æ–™ä¾†è‡ªå‹•å¢åŠ 
+//	ä»€éº¼æ™‚å€™è¦ç”¨åˆ°AI?  ç•¶æˆ‘å¾—"idç„¡æ„ç¾©"çš„æ™‚å€™ï¼Œå–®ç´”åªåšæµæ°´è™Ÿçš„æ™‚å€™
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	@Column(name = "id")
@@ -35,8 +35,8 @@ public class Quiz {
 	@Column(name = "description")
 	private String description;
 
-//	¸ê®Æ®w¸Ì­±ªºdateÃş«¬¨Ï¥Î«ü¦³¤U­±¤TºØ
-//	(1)  ¤é´Á   (2)  ®É¶¡    (3)  ¤é´Á¥[®É¶¡
+//	è³‡æ–™åº«è£¡é¢çš„dateé¡å‹ä½¿ç”¨æŒ‡æœ‰ä¸‹é¢ä¸‰ç¨®
+//	(1)  æ—¥æœŸ   (2)  æ™‚é–“    (3)  æ—¥æœŸåŠ æ™‚é–“
 //	(1)ocalDate(2)LocalTime(3)LocalDateTime
 	@Column(name = "start_date")
 	private LocalDate startDate;
@@ -47,8 +47,8 @@ public class Quiz {
 	@Column(name = "questions")
 	private String questions;
 
-//	¬°¦ó¤£¨Ï¥ÎisPublished? ¦]¬°get¥X¨Ó«á ­ì¥»¦]¸Ó¬O­nisIsPublished¡A¦ı¬O¦o¥X¨Ó«á«o¥u¦³isPublished
-//	boolean¥Í¦¨get«á«e­±·|¥[is
+//	ç‚ºä½•ä¸ä½¿ç”¨isPublished? å› ç‚ºgetå‡ºä¾†å¾Œ åŸæœ¬å› è©²æ˜¯è¦isIsPublishedï¼Œä½†æ˜¯å¥¹å‡ºä¾†å¾Œå»åªæœ‰isPublished
+//	booleanç”Ÿæˆgetå¾Œå‰é¢æœƒåŠ is
 	@Column(name = "published")
 	private boolean published;
 
@@ -56,7 +56,7 @@ public class Quiz {
 		super();
 	}
 
-//	«Øºc¤èªk¥i¥H"¤£»İ­n"ÂI¿ïid¦]¬°³o¸Ìªºid¬O¸òµÛ§Ú­Ìªºname¥Í¦¨¬y¤ô¸¹
+//	å»ºæ§‹æ–¹æ³•å¯ä»¥"ä¸éœ€è¦"é»é¸idå› ç‚ºé€™è£¡çš„idæ˜¯è·Ÿè‘—æˆ‘å€‘çš„nameç”Ÿæˆæµæ°´è™Ÿ
 	public Quiz(String name, String description, LocalDate startDate, LocalDate endDate, String questions,
 			boolean published) {
 		super();
@@ -68,7 +68,7 @@ public class Quiz {
 		this.published = published;
 	}
 
-//	¬°¤FÁ×§Kid¥i¯à·|¦b¨Ï¥Î¨ì¡A©Ò¥H¦b·s¼W¤@­Ó¨ã¦³©Ò¦³Äİ©Êªº«Øºc¤èªk
+//	ç‚ºäº†é¿å…idå¯èƒ½æœƒåœ¨ä½¿ç”¨åˆ°ï¼Œæ‰€ä»¥åœ¨æ–°å¢ä¸€å€‹å…·æœ‰æ‰€æœ‰å±¬æ€§çš„å»ºæ§‹æ–¹æ³•
 	public Quiz(int id, String name, String description, LocalDate startDate, LocalDate endDate, String questions,
 			boolean published) {
 		super();

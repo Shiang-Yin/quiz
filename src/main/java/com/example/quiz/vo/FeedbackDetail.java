@@ -21,10 +21,10 @@ public class FeedbackDetail {
 
 	private int age;
 	
-//	±N¥L¹³FeedbackªºFeedbackDetail³o¼Ë¼g...
+//	å°‡ä»–åƒFeedbackçš„FeedbackDetailé€™æ¨£å¯«...
 	
 
-//	            ÃD¸¹          ÃD¥Ø     µª®×
+//	            é¡Œè™Ÿ          é¡Œç›®     ç­”æ¡ˆ
 	private Map<Integer, Map<String, String>> quAnsMap;
 
 	public FeedbackDetail() {

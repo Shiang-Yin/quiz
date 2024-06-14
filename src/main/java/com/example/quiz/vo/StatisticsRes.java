@@ -6,10 +6,10 @@ import java.util.Map;
 
 public class StatisticsRes extends BasicRes {
 
-	// ²Ä´X°İ¨÷
+	// ç¬¬å¹¾å•å·
 	private int qId;
 
-	// ¼ĞÃD
+	// æ¨™é¡Œ
 	private String name;
 
 	private LocalDate starDate;
@@ -18,10 +18,10 @@ public class StatisticsRes extends BasicRes {
 
 //	private List<Statistics> statistics;
 
-	// ²Î­p<Àò±o °İÃDªºid °İÃDªº¿ï¶µ °İÃDªº²Î­p>
+	// çµ±è¨ˆ<ç²å¾— å•é¡Œçš„id å•é¡Œçš„é¸é … å•é¡Œçš„çµ±è¨ˆ>
 	private Map<Integer, Map<String, Integer>> ansStatistics;
 
-	// ·íÃD¥Ø¬°¤å¦r®É
+	// ç•¶é¡Œç›®ç‚ºæ–‡å­—æ™‚
 //	private Map<Integer, Map<String, String>> textStatistics;
 	private List<FeedbackText> feedbackText;
 

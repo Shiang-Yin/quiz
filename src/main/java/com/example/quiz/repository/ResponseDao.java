@@ -12,7 +12,7 @@ public interface ResponseDao extends JpaRepository<Response, Integer> {
 
 	public boolean existsByQuizIdAndPhone(int quizId, String phone);
 
-//	©w¸q§¹¤§«á¦^¥himpl¡A¼´¨ú¸ê®Æ
+//	å®šç¾©å®Œä¹‹å¾Œå›å»implï¼Œæ’ˆå–è³‡æ–™
 	public List<Response> findByQuizId(int quizId);
 	
 	

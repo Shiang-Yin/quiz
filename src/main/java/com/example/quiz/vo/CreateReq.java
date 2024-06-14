@@ -17,7 +17,7 @@ public class CreateReq {
 	@JsonProperty("end_date")
 	private LocalDate endDate;
 
-//	°İ¨÷¤£¥u¤@­Ó°İÃD¡A©Ò¥H¥i¥Hµ¹¥L²Õ¦¨¤@­Óª«¥ó¡A¨Ã¥Îlist¥]°_¨Ó
+//	å•å·ä¸åªä¸€å€‹å•é¡Œï¼Œæ‰€ä»¥å¯ä»¥çµ¦ä»–çµ„æˆä¸€å€‹ç‰©ä»¶ï¼Œä¸¦ç”¨liståŒ…èµ·ä¾†
 	@JsonProperty("question_list")
 	private List<Question> questionList;
 //	@JsonProperty("question_id")
@@ -29,10 +29,10 @@ public class CreateReq {
 //
 //	@JsonProperty("is_necessary")
 //	private boolean necessary;
-//	booleanu ¤@©w¬O¤p¼gb¡A¹w³]­È¬°flase(¦pªG¬O¤j¼gB¥L¤£¬O¥¬ªLª½¡A¦Ó¬Oclass)
+//	booleanu ä¸€å®šæ˜¯å°å¯«bï¼Œé è¨­å€¼ç‚ºflase(å¦‚æœæ˜¯å¤§å¯«Bä»–ä¸æ˜¯å¸ƒæ—ç›´ï¼Œè€Œæ˜¯class)
 
 	@JsonProperty("is_published")
-	private boolean published;// ¬O§_­nÀx¦s(¶ÈÀx¦s/Àx¦s¨Ãµo¥¬)
+	private boolean published;// æ˜¯å¦è¦å„²å­˜(åƒ…å„²å­˜/å„²å­˜ä¸¦ç™¼å¸ƒ)
 
 	public CreateReq() {
 		super();

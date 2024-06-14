@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class FillinReq {
 
-//	°İ¨÷¸¹½X
+//	å•å·è™Ÿç¢¼
 	@JsonProperty("quiz_id")
 	private int quizId;
 
@@ -19,7 +19,7 @@ public class FillinReq {
 
 	private int age;
 
-	// qu_id and answer map : answer¦³¦h­Ó­¹¥Î¤À¸¹(;)¦ê±µ (2024-06-05§ó°Ê¡A¤£¦b¨Ï¥Î¡A¼È¯d)
+	// qu_id and answer map : answeræœ‰å¤šå€‹é£Ÿç”¨åˆ†è™Ÿ(;)ä¸²æ¥ (2024-06-05æ›´å‹•ï¼Œä¸åœ¨ä½¿ç”¨ï¼Œæš«ç•™)
 	private Map<Integer, String> qIdAnswerMap;
 
 	private List<Fillin> fillin;

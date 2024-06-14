@@ -7,18 +7,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
 public class Response {
 
-//	¶ñ¼g°İ¨÷ªº¬y¤ô¸¹
+//	å¡«å¯«å•å·çš„æµæ°´è™Ÿ
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
 	@Column(name = "id")
 	private int id;
 
-//	°İ¨÷id(¤£¬OÃD¸¹³á!!)
+//	å•å·id(ä¸æ˜¯é¡Œè™Ÿå–”!!)
 	@Column(name = "quiz_id")
 	private int quizId;
 
@@ -39,8 +38,8 @@ public class Response {
 	
 	@Column(name = "fillin_date_time")
 	private LocalDateTime fillinDateTime=LocalDateTime.now();
-	//«Øºc¤èªk¥D­n¬O ±N§Ú©Ò³]ªº­È±aµ¹class(this.quizId)(§Ú©Ò­nsetªº­È)
-	//³o¸Ì¦]¬°¥i¥H¤£¥Î¦A¼g¶i¥h«Øºc¤èªk¡A¦]¬°fillinDateTime§Ú¤w¸gµ¹¥L­È¤F(LocalDateTime.now())
+	//å»ºæ§‹æ–¹æ³•ä¸»è¦æ˜¯ å°‡æˆ‘æ‰€è¨­çš„å€¼å¸¶çµ¦class(this.quizId)(æˆ‘æ‰€è¦setçš„å€¼)
+	//é€™è£¡å› ç‚ºå¯ä»¥ä¸ç”¨å†å¯«é€²å»å»ºæ§‹æ–¹æ³•ï¼Œå› ç‚ºfillinDateTimeæˆ‘å·²ç¶“çµ¦ä»–å€¼äº†(LocalDateTime.now())
 
 	public Response() {
 		super();

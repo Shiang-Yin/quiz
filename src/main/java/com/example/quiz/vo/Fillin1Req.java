@@ -1,9 +1,7 @@
 package com.example.quiz.vo;
 
 import java.util.List;
-import java.util.Map;
 
-import com.example.quiz.entity.Response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Fillin1Req {

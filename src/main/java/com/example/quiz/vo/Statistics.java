@@ -2,16 +2,16 @@ package com.example.quiz.vo;
 
 import java.util.Map;
 
-// ¤@±i°İ¨÷¤¤ªº"¤@ÃD"
+// ä¸€å¼µå•å·ä¸­çš„"ä¸€é¡Œ"
 public class Statistics {
 
-	// ÃD¸¹
+	// é¡Œè™Ÿ
 	private int qId;
 
-	// ÃD¥Ø
+	// é¡Œç›®
 	private String topic;
 
-	// ¿ï¶µ
+	// é¸é …
 	private String options;
 
 

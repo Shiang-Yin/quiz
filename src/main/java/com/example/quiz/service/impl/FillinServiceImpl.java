@@ -45,51 +45,51 @@ public class FillinServiceImpl implements FillinServic {
 	@Override
 	public BasicRes fillin(FillinReq req) {
 //		====================================================================
-		// °Ñ¼Æ±µ¦^¨Ó
+		// åƒæ•¸æ¥å›ä¾†
 		BasicRes checkResult = checkParam(req);
 		if (checkResult != null) {
 			return checkResult;
 		}
 //		====================================================================
-//		ÀË¬d¶ñ¼g°İ¨÷ªº¤H¬O§_¦³­«½Æ¶ñ¼g(¥H¹q¸Ü¸¹½X¬°¼f¬d)
+//		æª¢æŸ¥å¡«å¯«å•å·çš„äººæ˜¯å¦æœ‰é‡è¤‡å¡«å¯«(ä»¥é›»è©±è™Ÿç¢¼ç‚ºå¯©æŸ¥)
 		if (responseDao.existsByQuizIdAndPhone(req.getQuizId(), req.getPhone())) {
 			return new BasicRes(ResMessage.DUPLICATED_FILLIN.getCode(), ResMessage.DUPLICATED_FILLIN.getMessage());
 		}
-		// ÀË¬dquiz_id(°İ¨÷½s½X)¬O§_¦s¦b©óDB¤¤¡A¨Ã½Õ¥X§Ú­ì¥»¦bquiz¤¤ªºquestions(Àò¨ú¸Ì­±¸ê°T)
-		// ¦]¬°«áÄò·|¹ï¤ñreq¤¤ªºµª®×»PÃD¥Øªº¿ï¶µ¬O§_²Å¦X¡A©Ò¥H­n¥ÎfindById
+		// æª¢æŸ¥quiz_id(å•å·ç·¨ç¢¼)æ˜¯å¦å­˜åœ¨æ–¼DBä¸­ï¼Œä¸¦èª¿å‡ºæˆ‘åŸæœ¬åœ¨quizä¸­çš„questions(ç²å–è£¡é¢è³‡è¨Š)
+		// å› ç‚ºå¾ŒçºŒæœƒå°æ¯”reqä¸­çš„ç­”æ¡ˆèˆ‡é¡Œç›®çš„é¸é …æ˜¯å¦ç¬¦åˆï¼Œæ‰€ä»¥è¦ç”¨findById
 		Optional<Quiz> op = quizDao.findById(req.getQuizId());
 		if (op.isEmpty()) {
 			return new BasicRes(ResMessage.QUIZ_NOT_FOUND.getCode(), ResMessage.QUIZ_NOT_FOUND.getMessage());
 		}
-		// ±N¦r¦êÂà¦¨¯S©wÃş§OªºCLASS:readValue(String ,xxx () ) ;
-		// Âà¦¨¯S©wÃş§OªºList :readValue( XX , new TypeReference <>(){})
+		// å°‡å­—ä¸²è½‰æˆç‰¹å®šé¡åˆ¥çš„CLASS:readValue(String ,xxx () ) ;
+		// è½‰æˆç‰¹å®šé¡åˆ¥çš„List :readValue( XX , new TypeReference <>(){})
 		Quiz quiz = op.get();
-		// ±qquiz¤¤¨ú¥Xquestionªº¦r¦ê
+		// å¾quizä¸­å–å‡ºquestionçš„å­—ä¸²
 		String questionStr = quiz.getQuestions();
-		// ¨Ï¥ÎObjectMapper ¡A±NquestionStrÂà­¼List<Question>
+		// ä½¿ç”¨ObjectMapper ï¼Œå°‡questionStrè½‰ä¹˜List<Question>
 		String fillinStr = "";
-		// ¨ú±oqidªº©Ò¦³¸¹½X
+		// å–å¾—qidçš„æ‰€æœ‰è™Ÿç¢¼
 		List<Integer> qIds = new ArrayList<>();
 		List<Integer> ansQId = new ArrayList<>();
-		// ±N§Ú±o¨ìªºµª®×¸ê°T¶Ç¦^¦¹list
+		// å°‡æˆ‘å¾—åˆ°çš„ç­”æ¡ˆè³‡è¨Šå‚³å›æ­¤list
 		List<Fillin> filledAnswers = new ArrayList<>();
 
 		try {
-			// question­ì¥»(¦bquiz¤¤)¬O¦r¦ê«¬ºA¡A¬°¤F±o¨ìquestion¸Ì­±ªº¸ê°T¡A©Ò¥H»İ­n¥ıÂà¦¨list
+			// questionåŸæœ¬(åœ¨quizä¸­)æ˜¯å­—ä¸²å‹æ…‹ï¼Œç‚ºäº†å¾—åˆ°questionè£¡é¢çš„è³‡è¨Šï¼Œæ‰€ä»¥éœ€è¦å…ˆè½‰æˆlist
 			List<Question> quList = mapper.readValue(questionStr, new TypeReference<>() {
 			});
 //			for (Fillin ans : req.getFillin()) {
-//				//§Ú¥ı°²³]¤@­Ó boolean(ªì©lª¬ºA¬°false)
+//				//æˆ‘å…ˆå‡è¨­ä¸€å€‹ boolean(åˆå§‹ç‹€æ…‹ç‚ºfalse)
 //	            boolean idMatched = false;
-//	            //¦pªG§Ú¦³§ä¨ì´N·|¶i¤J³o­Ó°j°é
+//	            //å¦‚æœæˆ‘æœ‰æ‰¾åˆ°å°±æœƒé€²å…¥é€™å€‹è¿´åœˆ
 //	            for (Question item : quList) {
 //	                if (item.getId() == ans.getqId()) {
-//	                	//³o¸Ì¬O·í¥¦¦³§ä¨ì±ø¥ó®É
+//	                	//é€™è£¡æ˜¯ç•¶å®ƒæœ‰æ‰¾åˆ°æ¢ä»¶æ™‚
 //	                    idMatched = true;
 //	                    break;
 //	                }
 //	            }
-//	            //¦pªG¨S¦³§ä¨ì´N¤£¶i¤J°j°é¡Aª½±µ°±¤î
+//	            //å¦‚æœæ²’æœ‰æ‰¾åˆ°å°±ä¸é€²å…¥è¿´åœˆï¼Œç›´æ¥åœæ­¢
 //	            if (!idMatched) {
 //	                return new BasicRes(ResMessage.PARAM_QUESTION_ID_NOT_FOUND.getCode(), //
 //	                		ResMessage.PARAM_QUESTION_ID_NOT_FOUND.getMessage());
@@ -109,22 +109,22 @@ public class FillinServiceImpl implements FillinServic {
 //				}
 //			}
 
-//			¥Îfor°j°éÀË¬dquestion¤¤ªº©Ò¦³­È
+//			ç”¨forè¿´åœˆæª¢æŸ¥questionä¸­çš„æ‰€æœ‰å€¼
 			for (Question item : quList) {
 
-//				boolean match=false;//¥ıªì©l¤Æ
+//				boolean match=false;//å…ˆåˆå§‹åŒ–
 				for (Fillin ans : questionFillin) {
-//					//id¤£¤@¼Ëª½±µ¸õ¹L
+//					//idä¸ä¸€æ¨£ç›´æ¥è·³é
 //					if(item.getId()!=ans.getqId()) {
 //						continue;
 //					}
-//					//¦pªG­«½Æ¶ñ¼g¡A«h¨ú½l¤@¤ñ¨ä¥L³£¥h°£
+//					//å¦‚æœé‡è¤‡å¡«å¯«ï¼Œå‰‡å–ç· ä¸€æ¯”å…¶ä»–éƒ½å»é™¤
 //					if(qIds.contains(ans.getqId())) {
 //						continue;
 //					}
 //	========================================================================
 					/**
-					 * //±Nquestionªºid»Pfillinªºid¬Û¤ñ¹ï¡A¦pªG¤£¬Ûµ¥´N¸õ¥XÄµ§i qIds.add(item.getId());
+					 * //å°‡questionçš„idèˆ‡fillinçš„idç›¸æ¯”å°ï¼Œå¦‚æœä¸ç›¸ç­‰å°±è·³å‡ºè­¦å‘Š qIds.add(item.getId());
 					 * ansQId.add(ans.getqId()); if(!qIds.equals(ansQId)) { return new
 					 * BasicRes(ResMessage.PARAM_QUIZ_ID_ERROR.getCode(),
 					 * ResMessage.PARAM_QUIZ_ID_ERROR.getMessage()); }
@@ -139,14 +139,14 @@ public class FillinServiceImpl implements FillinServic {
 						}
 						if (!item.getType().equalsIgnoreCase(OptionType.TEXT.getType())) {
 
-							// ÀË¬dµª®×
+							// æª¢æŸ¥ç­”æ¡ˆ
 							String answerStr = ans.getAnswer();
 							String[] answerArray = answerStr.split(";");
 
 							String[] optionArray = item.getOptions().split(";");
 							List<String> optionList = List.of(optionArray);
 
-							// ÃD«¬¬O³æ¿ï¥Bµª®×ªø«×¤j©ó1®É
+							// é¡Œå‹æ˜¯å–®é¸ä¸”ç­”æ¡ˆé•·åº¦å¤§æ–¼1æ™‚
 							if (item.getType().equalsIgnoreCase(OptionType.SINGLE_CHOICE.getType())
 									&& answerArray.length > 1) {
 								return new BasicRes(ResMessage.SHOOSE_ONE_ANSER.getCode(),
@@ -174,7 +174,7 @@ public class FillinServiceImpl implements FillinServic {
 						fillin.setNecessary(item.isNecessary());
 
 						filledAnswers.add(fillin);
-						break; // °±¤î°j°é
+						break; // åœæ­¢è¿´åœˆ
 					}
 
 				}
@@ -196,12 +196,12 @@ public class FillinServiceImpl implements FillinServic {
 
 //	============================================================================
 	private BasicRes checkParam(FillinReq req) {
-//		ÀË¬d°Ñ¼Æ 
-		// °²³]°İÃD½s¸¹¤p©ó0¡Aªğ¦^¿ù»~
+//		æª¢æŸ¥åƒæ•¸ 
+		// å‡è¨­å•é¡Œç·¨è™Ÿå°æ–¼0ï¼Œè¿”å›éŒ¯èª¤
 		if (req.getQuizId() <= 0) {
 			return new BasicRes(ResMessage.PARAM_QUIZ_ID_ERROR.getCode(), ResMessage.PARAM_QUIZ_ID_ERROR.getMessage());
 		}
-		// ¶ñ¼g­Ó¤H°T®§(¦W¤l¡B¤â¾÷¡B«H½c¤£¬°ªÅ­È)
+		// å¡«å¯«å€‹äººè¨Šæ¯(åå­ã€æ‰‹æ©Ÿã€ä¿¡ç®±ä¸ç‚ºç©ºå€¼)
 		if (!StringUtils.hasText(req.getName())) {
 			return new BasicRes(ResMessage.PARAM_NAME_IS_REQUIRED.getCode(),
 					ResMessage.PARAM_NAME_IS_REQUIRED.getMessage());
@@ -232,51 +232,51 @@ public class FillinServiceImpl implements FillinServic {
 
 	@Override
 	public StatisticsRes statistics(FeedbackReq req) {
-		// ¬°¤F¨ú±o¬d¬İ°İ¨÷¬O§_¦s¦b
+		// ç‚ºäº†å–å¾—æŸ¥çœ‹å•å·æ˜¯å¦å­˜åœ¨
 		Optional<Quiz> op = quizDao.findById(req.getQuizId());
 		if (op.isEmpty()) {
 			return new StatisticsRes(ResMessage.QUIZ_NOT_FOUND.getCode(), //
 					ResMessage.QUIZ_NOT_FOUND.getMessage());
 		}
 		Quiz ques = op.get();
-		// ¨ú±oquiz¤¤ªº°İ¨÷½s¸¹¡B¼ĞÃD¡B¶}©l®É¶¡¡Bµ²§ô®É¶¡
+		// å–å¾—quizä¸­çš„å•å·ç·¨è™Ÿã€æ¨™é¡Œã€é–‹å§‹æ™‚é–“ã€çµæŸæ™‚é–“
 		int quizId = ques.getId();
 		String name = ques.getName();
 		LocalDate startdate = ques.getStartDate();
 		LocalDate enddate = ques.getEndDate();
 
-		// §Q¥ÎfindByIdªº¤è¦¡¡A½Õ¥Xresponse(response¬O¤@¥÷°İ¨÷¡Aquiz¦³«Ü¦h±i°İ¨÷(response),
-		//©Ò¥Hresponse¤]ºâ¬Oquizªº¤@­Ó¶°¦X)
+		// åˆ©ç”¨findByIdçš„æ–¹å¼ï¼Œèª¿å‡ºresponse(responseæ˜¯ä¸€ä»½å•å·ï¼Œquizæœ‰å¾ˆå¤šå¼µå•å·(response),
+		//æ‰€ä»¥responseä¹Ÿç®—æ˜¯quizçš„ä¸€å€‹é›†åˆ)
 		List<Response> responseList = responseDao.findByQuizId(req.getQuizId());
 		
-		// «Ø¥ß¤@­Ó·sªºhasMap,¥Î¨Ó©ñ¸m§Úªº<ÃD¥Ø½s¸¹,<°İÃD¿ï¶µ,­pºâ¦¸¼Æ>>
+		// å»ºç«‹ä¸€å€‹æ–°çš„hasMap,ç”¨ä¾†æ”¾ç½®æˆ‘çš„<é¡Œç›®ç·¨è™Ÿ,<å•é¡Œé¸é …,è¨ˆç®—æ¬¡æ•¸>>
 		Map<Integer, Map<String, Integer>> ansStatistics = new HashMap<>();
 
-		//©ñ¸m :·í±ø¥ó¬°¤å¥ó®É¡AÅã¥Ü©Ò¦³¶ñ¼gªº¸ê®Æ(Åã¥Ü:ÃD¥Ø¸¹½X¡BÃD¥Ø¡Bµª®×)
+		//æ”¾ç½® :ç•¶æ¢ä»¶ç‚ºæ–‡ä»¶æ™‚ï¼Œé¡¯ç¤ºæ‰€æœ‰å¡«å¯«çš„è³‡æ–™(é¡¯ç¤º:é¡Œç›®è™Ÿç¢¼ã€é¡Œç›®ã€ç­”æ¡ˆ)
 		List<FeedbackText> feedbackText=new ArrayList<FeedbackText>();
-		//    ÃD¸¹     ÃD¥Ø
+		//    é¡Œè™Ÿ     é¡Œç›®
 		Map<Integer, String> textStatistics=new HashMap<>();
 
-		// ¦b°İ¨÷¤¤§ì¨ú§Úªº¶ñµª¸ê°T
+		// åœ¨å•å·ä¸­æŠ“å–æˆ‘çš„å¡«ç­”è³‡è¨Š
 		for (Response item : responseList) {
-			// ±N¶ñµª¸ê®ÆÂà±q¦r¦ê(String)Âà´«¦¨(list)
+			// å°‡å¡«ç­”è³‡æ–™è½‰å¾å­—ä¸²(String)è½‰æ›æˆ(list)
 			try {
 				List<Fillin> fillStrList = mapper.readValue(item.getFillin(), new TypeReference<>() {
 				});
 
 				
 				for (Fillin fillin : fillStrList) {
-					//   ÃD¥Ø    µª®×²Î­p 
+					//   é¡Œç›®    ç­”æ¡ˆçµ±è¨ˆ 
 					Map<String, Integer> quAndCount = new HashMap<>();
-					//1¡B¥ı´£¨ú¥X¿ï¶µ
+					//1ã€å…ˆæå–å‡ºé¸é …
 					String optionStr = fillin.getQuestion();
-					//1.1 ±N¿ï¶µ¥Î";"¥h°£
+					//1.1 å°‡é¸é …ç”¨";"å»é™¤
 					String[] optionArray = optionStr.split(";");
-					//2¡B¦A´£¨ú¥Xµª®×
+					//2ã€å†æå–å‡ºç­”æ¡ˆ
 					String answer = fillin.getAnswer();
-					//±Nµª®×ªº«e«á³£¥[¤W";"
+					//å°‡ç­”æ¡ˆçš„å‰å¾Œéƒ½åŠ ä¸Š";"
 					answer = ";" + answer + ";";
-					//¶}©l¶i¦æ­pºâ
+					//é–‹å§‹é€²è¡Œè¨ˆç®—
 					for (String option : optionArray) {
 						if(fillin.getType().equals(OptionType.TEXT.getType())) {
 							textStatistics.put(fillin.getqId(), fillin.getQuestion());
@@ -303,25 +303,25 @@ public class FillinServiceImpl implements FillinServic {
 					
 					
 					
-//					// ÃD¨ú¥X¿ï¶µ
+//					// é¡Œå–å‡ºé¸é …
 ////					String optionStr = fillin.getQuestion();
 ////					String[] optionArray = optionStr.split(";");
-//					// ÃD¨ú¥Xµª®×
+//					// é¡Œå–å‡ºç­”æ¡ˆ
 //					String answer = fillin.getAnswer();
-//					// ±Nµª®×«e«á³£¥[¤W";"
+//					// å°‡ç­”æ¡ˆå‰å¾Œéƒ½åŠ ä¸Š";"
 //					answer = ";" + answer + ";";
-//					// ¤ñ¹ïµª®×»P¿ï¶µ
-//					// §âÃD¥Ø·í§@¥Ø¼Ğ¡A¨Ó¿z¿ïµª®×¥X²{¦¸¼Æ
-//					// ¬°¤FÁ×§K¨C­Ó¿ï¶µ¬O¥t¤@­Óµª®×ªº¨ä¤¤¤@­Ó³¡¤À(¨Ò¦p: "ºñ¯ù"»P"ºñ¯ù®³ÅK")
-//					// ©Ò¥H§Ú­Ì¥i¥H±N¨C­Ó¿ï¶µªº«e«á³£¥[¤W¤@­Ó;(¤À¸¹)(ÅÜ¦¨ ;ºñ¯ù;ºñ¯ù®³ÅK; ­ì¥» ºñ¯ù;ºñ¯ù®³ÅK)
+//					// æ¯”å°ç­”æ¡ˆèˆ‡é¸é …
+//					// æŠŠé¡Œç›®ç•¶ä½œç›®æ¨™ï¼Œä¾†ç¯©é¸ç­”æ¡ˆå‡ºç¾æ¬¡æ•¸
+//					// ç‚ºäº†é¿å…æ¯å€‹é¸é …æ˜¯å¦ä¸€å€‹ç­”æ¡ˆçš„å…¶ä¸­ä¸€å€‹éƒ¨åˆ†(ä¾‹å¦‚: "ç¶ èŒ¶"èˆ‡"ç¶ èŒ¶æ‹¿éµ")
+//					// æ‰€ä»¥æˆ‘å€‘å¯ä»¥å°‡æ¯å€‹é¸é …çš„å‰å¾Œéƒ½åŠ ä¸Šä¸€å€‹;(åˆ†è™Ÿ)(è®Šæˆ ;ç¶ èŒ¶;ç¶ èŒ¶æ‹¿éµ; åŸæœ¬ ç¶ èŒ¶;ç¶ èŒ¶æ‹¿éµ)
 ////					List<String> totalAns=new ArrayList<String>();
 ////					statResults.clear();
-//					// µª®×ªº²Î­p­pºâ©ñ¤J¦a¤è
+//					// ç­”æ¡ˆçš„çµ±è¨ˆè¨ˆç®—æ”¾å…¥åœ°æ–¹
 //					List<StatResults> statResults = new ArrayList<StatResults>();
 //					statResults.clear();
 //					for (String option : quOptionList) {
 //						
-//						// ¦ê¤À¸¹
+//						// ä¸²åˆ†è™Ÿ
 //						String newoption = ";" + option + ";";
 //						int oldAnswerStr = answer.length();
 //						int newAnswerStr = answer.replace(newoption, "").length();

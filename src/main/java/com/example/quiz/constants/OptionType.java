@@ -2,9 +2,9 @@ package com.example.quiz.constants;
 
 public enum OptionType {
 
-	SINGLE_CHOICE("³æ¿ï"),//
-	MULIT_CHOICE("¦h¿ï"),//
-	TEXT("¤å¦r")
+	SINGLE_CHOICE("å–®é¸"),//
+	MULIT_CHOICE("å¤šé¸"),//
+	TEXT("æ–‡å­—")
 	;
 	
 	private String type;

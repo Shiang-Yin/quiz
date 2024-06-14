@@ -9,17 +9,17 @@ import com.example.quiz.vo.updateOrCreateReq;
 
 public interface QuizService {
 
-//	³Ğ«Ø¸ê®Æ
+//	å‰µå»ºè³‡æ–™
 	public BasicRes create(CreateReq req);
-//	·s¼W¸ê®Æ§ó·s¸ê®Æ
+//	æ–°å¢è³‡æ–™æ›´æ–°è³‡æ–™
 	public BasicRes updateOrCreate(updateOrCreateReq req);
 	
-//	·j¯Á¸ê®Æ
+//	æœç´¢è³‡æ–™
 	public SearchRes search(SearchReq req);
 
-//	§R°£¸ê®Æ   ¥u»İ­n§PÂ_PK§Y¥i
+//	åˆªé™¤è³‡æ–™   åªéœ€è¦åˆ¤æ–·PKå³å¯
 	public BasicRes delete(DeleteReq req);
 	
-//	·s¼W¸ê®Æ§ó·s¸ê®Æ
+//	æ–°å¢è³‡æ–™æ›´æ–°è³‡æ–™
 //	public void update(UpdateReq req);
 }

@@ -21,25 +21,25 @@ public class QuizController {
 	@Autowired
 	private QuizService quizService;
 
-	//³Ğ«Ø·s¸ê°T
+	//å‰µå»ºæ–°è³‡è¨Š
 	@PostMapping(value = "quiz/create")
 	public BasicRes create(@RequestBody CreateReq req) {
 		return quizService.create(req);
 	}
 
-	//§ó·s»P³Ğ³y
+	//æ›´æ–°èˆ‡å‰µé€ 
 	@PostMapping(value = "quiz/updateOrCreate")
 	public BasicRes updateOrCreate(@RequestBody updateOrCreateReq req) {
 		return quizService.updateOrCreate(req);
 	}
 
-	//·j¯Á
+	//æœç´¢
 	@PostMapping(value = "quiz/search")
 	public SearchRes search(@RequestBody SearchReq req) {
 		return quizService.search(req);
 	}
 
-	//§R°£
+	//åˆªé™¤
 	@PostMapping(value = "quiz/delete")
 	public BasicRes delete(@RequestBody DeleteReq req) {
 		return quizService.delete(req);

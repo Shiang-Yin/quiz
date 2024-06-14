@@ -42,81 +42,81 @@ public class ResponseServiceImpl implements ResponseService {
 
 	@Override
 	public BasicRes fillin(FillinReq req) {
-		// °Ñ¼Æ±µ¦^¨Ó
+		// åƒæ•¸æ¥å›ä¾†
 		BasicRes checkResult = checkParam(req);
 		if (checkResult != null) {
 			return checkResult;
 		}
-//		ÀË¬d¶ñ¼g°İ¨÷ªº¤H¬O§_¦³­«½Æ¶ñ¼g(¥H¹q¸Ü¸¹½X¬°¼f¬d)
+//		æª¢æŸ¥å¡«å¯«å•å·çš„äººæ˜¯å¦æœ‰é‡è¤‡å¡«å¯«(ä»¥é›»è©±è™Ÿç¢¼ç‚ºå¯©æŸ¥)
 		if (responseDao.existsByQuizIdAndPhone(req.getQuizId(), req.getPhone())) {
 			return new BasicRes(ResMessage.DUPLICATED_FILLIN.getCode(), ResMessage.DUPLICATED_FILLIN.getMessage());
 		}
-		// ÀË¬dquiz_id(°İ¨÷½s½X)¬O§_¦s¦b©óDB¤¤¡A¨Ã½Õ¥X§Ú­ì¥»¦bquiz¤¤ªºquestions(Àò¨ú¸Ì­±¸ê°T)
-		// ¦]¬°«áÄò·|¹ï¤ñreq¤¤ªºµª®×»PÃD¥Øªº¿ï¶µ¬O§_²Å¦X¡A©Ò¥H­n¥ÎfindById
+		// æª¢æŸ¥quiz_id(å•å·ç·¨ç¢¼)æ˜¯å¦å­˜åœ¨æ–¼DBä¸­ï¼Œä¸¦èª¿å‡ºæˆ‘åŸæœ¬åœ¨quizä¸­çš„questions(ç²å–è£¡é¢è³‡è¨Š)
+		// å› ç‚ºå¾ŒçºŒæœƒå°æ¯”reqä¸­çš„ç­”æ¡ˆèˆ‡é¡Œç›®çš„é¸é …æ˜¯å¦ç¬¦åˆï¼Œæ‰€ä»¥è¦ç”¨findById
 		Optional<Quiz> op = quizDao.findById(req.getQuizId());
 		if (op.isEmpty()) {
 			return new BasicRes(ResMessage.QUIZ_NOT_FOUND.getCode(), ResMessage.QUIZ_NOT_FOUND.getMessage());
 		}
-		// ±N¦r¦êÂà¦¨¯S©wÃş§OªºCLASS:readValue(String ,xxx () ) ;
-		// Âà¦¨¯S©wÃş§OªºList :readValue( XX , new TypeReference <>(){})
+		// å°‡å­—ä¸²è½‰æˆç‰¹å®šé¡åˆ¥çš„CLASS:readValue(String ,xxx () ) ;
+		// è½‰æˆç‰¹å®šé¡åˆ¥çš„List :readValue( XX , new TypeReference <>(){})
 		Quiz quiz = op.get();
-		// ±qquiz¤¤¨ú¥Xquestionªº¦r¦ê
+		// å¾quizä¸­å–å‡ºquestionçš„å­—ä¸²
 		String questionStr = quiz.getQuestions();
-		// ¨Ï¥ÎObjectMapper ¡A±NquestionStrÂà­¼List<Question>
+		// ä½¿ç”¨ObjectMapper ï¼Œå°‡questionStrè½‰ä¹˜List<Question>
 		ObjectMapper mapper = new ObjectMapper();
-		// fillinStr­nµ¹ªÅ¦r¦ê¡A¤£µM¹w³]­È·|¬Onull
-		// ­YfillinStr=null ¡A «áÄò°õ¦æfillinStr =
+		// fillinStrè¦çµ¦ç©ºå­—ä¸²ï¼Œä¸ç„¶é è¨­å€¼æœƒæ˜¯null
+		// è‹¥fillinStr=null ï¼Œ å¾ŒçºŒåŸ·è¡ŒfillinStr =
 		// mapper.writeValueAsString(req.getqIdAnswerMap());
-		// §â°õ¦æ±o¨ìµ²ªG¶ë¦^µ¹fillinStr®É·|¡A³ø¿ù
+		// æŠŠåŸ·è¡Œå¾—åˆ°çµæœå¡å›çµ¦fillinStræ™‚æœƒï¼Œå ±éŒ¯
 		String fillinStr = "";
 //		List<Question> quList=mapper.readValue(questionStr, new TypeReference<>(){});
-//		questionStr, new TypeReference<«¬ºA>(¥i©ñlist[¨Ò¦p:List.of()]){©â¶HÃş§O}
-		// ¤W­±¨º¦æ¿ï¾Ü(try...catch)¡A´N¥iÅÜ¦¨¤U­±¨º¦æ
+//		questionStr, new TypeReference<å‹æ…‹>(å¯æ”¾list[ä¾‹å¦‚:List.of()]){æŠ½è±¡é¡åˆ¥}
+		// ä¸Šé¢é‚£è¡Œé¸æ“‡(try...catch)ï¼Œå°±å¯è®Šæˆä¸‹é¢é‚£è¡Œ
 		try {
 			List<Question> quList = mapper.readValue(questionStr, new TypeReference<>() {
 			});
-//			¥Îfor°j°éÀË¬dquestion¤¤ªº©Ò¦³­È
+//			ç”¨forè¿´åœˆæª¢æŸ¥questionä¸­çš„æ‰€æœ‰å€¼
 			for (Question item : quList) {
-//				¤ñ¹ï¸ÓÃD¬O§_¥²¶ñ¡A¥Breq¤¤ªºgetqIdAnswerMap¹ïÀ³ªºqId¦³µª®×
-//				ÀË¬d¿ïµª®×¬O§_»P¿ï¶µ¤@­P
-//				§âµª®×¦r¦ê(req.getqIdAnswerMap() ¤¤ªºvalue) ¥Î¤À¸¹(;)¤Á³Î¦¨°}¦C
-//				³z¹Litem¤¤ªºid·í¦¨key¨Ó¨ú±oreq.getqIdAnswerMap()¤¤¹ïÀ³ªºvalue­È
-//				¨Ï¥Îget(key),map·|®Ú¾Úkey¨ú±o¹ïÀ³ªºvalueª½
-				// ®Ú¾Ú °İ¨÷(Question)ªºid¦^µª°İÃD (questionªºid¬O°İÃDªºÃD¸¹ ¨Ò¦p :1¡B¶¼®Æ³Ü¤°»ò?¡Boptions¡B...)
-				// question¤¤¨ä¥Lªº§Ú³£¤£À]¡A§Ú´N¥u§ì"ÃD¸¹"¦Ó¤w¡AµM«á®Ú¾ÚÃD¸¹¼g¤U§Úªºµª®×
+//				æ¯”å°è©²é¡Œæ˜¯å¦å¿…å¡«ï¼Œä¸”reqä¸­çš„getqIdAnswerMapå°æ‡‰çš„qIdæœ‰ç­”æ¡ˆ
+//				æª¢æŸ¥é¸ç­”æ¡ˆæ˜¯å¦èˆ‡é¸é …ä¸€è‡´
+//				æŠŠç­”æ¡ˆå­—ä¸²(req.getqIdAnswerMap() ä¸­çš„value) ç”¨åˆ†è™Ÿ(;)åˆ‡å‰²æˆé™£åˆ—
+//				é€éitemä¸­çš„idç•¶æˆkeyä¾†å–å¾—req.getqIdAnswerMap()ä¸­å°æ‡‰çš„valueå€¼
+//				ä½¿ç”¨get(key),mapæœƒæ ¹æ“škeyå–å¾—å°æ‡‰çš„valueç›´
+				// æ ¹æ“š å•å·(Question)çš„idå›ç­”å•é¡Œ (questionçš„idæ˜¯å•é¡Œçš„é¡Œè™Ÿ ä¾‹å¦‚ :1ã€é£²æ–™å–ä»€éº¼?ã€optionsã€...)
+				// questionä¸­å…¶ä»–çš„æˆ‘éƒ½ä¸é¤¨ï¼Œæˆ‘å°±åªæŠ“"é¡Œè™Ÿ"è€Œå·²ï¼Œç„¶å¾Œæ ¹æ“šé¡Œè™Ÿå¯«ä¸‹æˆ‘çš„ç­”æ¡ˆ
 				String answerStr = req.getqIdAnswerMap().get(item.getId());
-//				µM«á¦A±NanswerStr(µª®×)¤Á³Î¦¨°}¦C(¦]¬°¦h¿ï¤£¥u¤@­Óµª®×¡A¤@¼Ë¥H";"¤À¹j¨Ó®Ñ¼g)  //§Úªºµª®×¤À³Î
+//				ç„¶å¾Œå†å°‡answerStr(ç­”æ¡ˆ)åˆ‡å‰²æˆé™£åˆ—(å› ç‚ºå¤šé¸ä¸åªä¸€å€‹ç­”æ¡ˆï¼Œä¸€æ¨£ä»¥";"åˆ†éš”ä¾†æ›¸å¯«)  //æˆ‘çš„ç­”æ¡ˆåˆ†å‰²
 				String[] answerArray = answerStr.split(";");
 //				if(item.isNecessary() && (!req.getqIdAnswerMap().containsKey(item.getId())
 //						||!StringUtils.hasText(answerStr)))
-//				»P86¦æ¦X¨Ö  ÅÜ¦¨  ·í (¥²¶ñ®É(true) *¥B* µª®×¤S¬° null¡B""¡B" "
+//				èˆ‡86è¡Œåˆä½µ  è®Šæˆ  ç•¶ (å¿…å¡«æ™‚(true) *ä¸”* ç­”æ¡ˆåˆç‚º nullã€""ã€" "
 				if (item.isNecessary() && !StringUtils.hasText(answerStr)) {
 					return new BasicRes(ResMessage.ANSWER_IS_REQUIRED.getCode(),
 							ResMessage.ANSWER_IS_REQUIRED.getMessage());
 				}
 
-				// ±Æ°£(¸õ¹L)Â²µªÃD¡Foption type ¬O text
+				// æ’é™¤(è·³é)ç°¡ç­”é¡Œï¼›option type æ˜¯ text
 				if (item.getType().equalsIgnoreCase(OptionType.TEXT.getType())) {
 					continue;
 				}
-				// ±Æ°£option type ¬O³æ¿ï¡A¦ıµª®×¦³¦h­Ó®É
-				// ÃD«¬¬O³æ¿ï¥Bµª®×ªø«×¤j©ó1®É
+				// æ’é™¤option type æ˜¯å–®é¸ï¼Œä½†ç­”æ¡ˆæœ‰å¤šå€‹æ™‚
+				// é¡Œå‹æ˜¯å–®é¸ä¸”ç­”æ¡ˆé•·åº¦å¤§æ–¼1æ™‚
 				if (item.getType().equalsIgnoreCase(OptionType.SINGLE_CHOICE.getType()) && answerArray.length > 1) {
 					return new BasicRes(ResMessage.SHOOSE_ONE_ANSER.getCode(),
 							ResMessage.SHOOSE_ONE_ANSER.getMessage());
 				}
 
-//				option¿ï¶µ¤À³Î¿ï¶µ¤À³Î
+//				optioné¸é …åˆ†å‰²é¸é …åˆ†å‰²
 				String[] optionArray = item.getOptions().split(";");
-//				¤À³Î¤§«á¦A¨Ó¤ñ¹ï
+//				åˆ†å‰²ä¹‹å¾Œå†ä¾†æ¯”å°
 				List<String> optionList = List.of(optionArray);
 
-//				§â¨C­Óµª®×¸ò¿ï¶µ¤ñ¹ï:´N¬O¤ñ¹ïµª®×¸ò¸ÓÃD¿ï¶µ¬O§_¤@­P
+//				æŠŠæ¯å€‹ç­”æ¡ˆè·Ÿé¸é …æ¯”å°:å°±æ˜¯æ¯”å°ç­”æ¡ˆè·Ÿè©²é¡Œé¸é …æ˜¯å¦ä¸€è‡´
 				for (String str : answerArray) {
 					/*
-					 * containsTestªº¥Îªk //°²³]item.getOptions()ªº­È¬O"A;B;C;D" //°²³]answerArray=[A,B] //for
-					 * °j°é¤¤´N¬O§âA©MB¹ï¤ñ¬O§_¥]§t¦b¦r¦ê¸Ì­±¡Aitem.getOptions()¤¤ //¥B­n±Æ°£¬Otext®É //contains
-					 * ¥i¥H¬İtestªºcontainsTestªº¥Îªk
+					 * containsTestçš„ç”¨æ³• //å‡è¨­item.getOptions()çš„å€¼æ˜¯"A;B;C;D" //å‡è¨­answerArray=[A,B] //for
+					 * è¿´åœˆä¸­å°±æ˜¯æŠŠAå’ŒBå°æ¯”æ˜¯å¦åŒ…å«åœ¨å­—ä¸²è£¡é¢ï¼Œitem.getOptions()ä¸­ //ä¸”è¦æ’é™¤æ˜¯textæ™‚ //contains
+					 * å¯ä»¥çœ‹testçš„containsTestçš„ç”¨æ³•
 					 */
 //					if(item.isNecessary() && !optionList.contains(str)
 //							&& !item.getType().equalsIgnoreCase(OptionType.TEXT.getType()))
@@ -148,12 +148,12 @@ public class ResponseServiceImpl implements ResponseService {
 //	====================================================================================================
 
 	private BasicRes checkParam(FillinReq req) {
-//		ÀË¬d°Ñ¼Æ 
-		// °²³]°İÃD½s¸¹¤p©ó0¡Aªğ¦^¿ù»~
+//		æª¢æŸ¥åƒæ•¸ 
+		// å‡è¨­å•é¡Œç·¨è™Ÿå°æ–¼0ï¼Œè¿”å›éŒ¯èª¤
 		if (req.getQuizId() <= 0) {
 			return new BasicRes(ResMessage.PARAM_QUIZ_ID_ERROR.getCode(), ResMessage.PARAM_QUIZ_ID_ERROR.getMessage());
 		}
-		// ¶ñ¼g­Ó¤H°T®§(¦W¤l¡B¤â¾÷¡B«H½c¤£¬°ªÅ­È)
+		// å¡«å¯«å€‹äººè¨Šæ¯(åå­ã€æ‰‹æ©Ÿã€ä¿¡ç®±ä¸ç‚ºç©ºå€¼)
 		if (!StringUtils.hasText(req.getName())) {
 			return new BasicRes(ResMessage.PARAM_NAME_IS_REQUIRED.getCode(),
 					ResMessage.PARAM_NAME_IS_REQUIRED.getMessage());
@@ -179,51 +179,51 @@ public class ResponseServiceImpl implements ResponseService {
 	public FeedbackRes feedback(FeedbackReq req) {
 
 		ObjectMapper mapper = new ObjectMapper();
-		// ±q QuizDao ¤¤¬d¸ß Quiz ¹ï¶H
+		// å¾ QuizDao ä¸­æŸ¥è©¢ Quiz å°è±¡
 		Optional<Quiz> quiz = quizDao.findById(req.getQuizId());
 		if (quiz.isEmpty()) {
 			return new FeedbackRes(ResMessage.QUIZ_NOT_FOUND.getCode(), ResMessage.QUIZ_NOT_FOUND.getMessage());
 		}
 		Quiz quizGet = quiz.get();
-//        ¨ú±oList<Question>ªº¦r¦ê
-//        quiz(entity)ªºquestion¬O¦r¦ê¡A¦ı¬OÃD¥ØQuestion¦³«Ü¦h¡A©Ò¥H±N¦oÂà¬°°}¦C
+//        å–å¾—List<Question>çš„å­—ä¸²
+//        quiz(entity)çš„questionæ˜¯å­—ä¸²ï¼Œä½†æ˜¯é¡Œç›®Questionæœ‰å¾ˆå¤šï¼Œæ‰€ä»¥å°‡å¥¹è½‰ç‚ºé™£åˆ—
 		String questionStr = quizGet.getQuestions();
-//        ¦A±N¥LÂà¦¨list<question>
-//        List<Question> quList=mapper.readValue(questionStr, new TypeReference<>() {});ÂI¤@¤UÂàtry...catch
+//        å†å°‡ä»–è½‰æˆlist<question>
+//        List<Question> quList=mapper.readValue(questionStr, new TypeReference<>() {});é»ä¸€ä¸‹è½‰try...catch
 		try {
 			List<Question> quList = mapper.readValue(questionStr, new TypeReference<>() {
 			});
 
-//			¥ı§â¨C­Ó°İÃDªº½s½X©MÃD¥Ø©ñ¨ìquAnsMap¤¤
+//			å…ˆæŠŠæ¯å€‹å•é¡Œçš„ç·¨ç¢¼å’Œé¡Œç›®æ”¾åˆ°quAnsMapä¸­
 			Map<Integer, Map<String, String>> quIdAndQuAnsMap = new HashMap<>();
-//			lambda¼gªk
-//			³o¸Ìªºitem´N¬O  for(Question item:quList)¤¤ªºitem¬O¤@¼Ëªº
+//			lambdaå¯«æ³•
+//			é€™è£¡çš„itemå°±æ˜¯  for(Question item:quList)ä¸­çš„itemæ˜¯ä¸€æ¨£çš„
 			quList.forEach(item -> {
 				Map<String, String> quAndAnsMap = new HashMap<>();
-				// ¨S¦³µª®×©Ò¥H¥ı©ñnull
+				// æ²’æœ‰ç­”æ¡ˆæ‰€ä»¥å…ˆæ”¾null
 				quAndAnsMap.put(item.getTitle(), null);
 				quIdAndQuAnsMap.put(item.getId(), quAndAnsMap);
 			});
 
-//			¼´¨ú¦P¤@¥÷°İ¨÷ªº¦^õX(¦Adao¤¤©w¸q§¹¤§«á¦^¨Ó³o¸Ì¼´¨ú¸ê®Æ)¡A¦b³o¸Ì¬O¦]¬°reqªºid¬O»Presponse¬O¤@¼Ëªº¡A³£¬O°İ¨÷½s½X
+//			æ’ˆå–åŒä¸€ä»½å•å·çš„å›é¥‹(å†daoä¸­å®šç¾©å®Œä¹‹å¾Œå›ä¾†é€™è£¡æ’ˆå–è³‡æ–™)ï¼Œåœ¨é€™è£¡æ˜¯å› ç‚ºreqçš„idæ˜¯èˆ‡responseæ˜¯ä¸€æ¨£çš„ï¼Œéƒ½æ˜¯å•å·ç·¨ç¢¼
 			List<Response> resList = responseDao.findByQuizId(req.getQuizId());
-//			¦]¬°¨ú¥X¨Ó¸ê«á·|¦³«Ü¦h¦^õX¡A©Ò¥H­n¥ı¹M¾ú¨C¤@¥÷¦^õX
-//			resList­Y¬O¤]¥Îlambda¼gªk·|¦A¦¸²£¥Í¥X¤@­Ótry...catch...
+//			å› ç‚ºå–å‡ºä¾†è³‡å¾Œæœƒæœ‰å¾ˆå¤šå›é¥‹ï¼Œæ‰€ä»¥è¦å…ˆéæ­·æ¯ä¸€ä»½å›é¥‹
+//			resListè‹¥æ˜¯ä¹Ÿç”¨lambdaå¯«æ³•æœƒå†æ¬¡ç”¢ç”Ÿå‡ºä¸€å€‹try...catch...
 			for (Response item : resList) {
-				// ¨ú¥X°İÃD¤ÏõX(¦bfillinReq¤¤)
-				// ÃD¸¹ µª®×
+				// å–å‡ºå•é¡Œåé¥‹(åœ¨fillinReqä¸­)
+				// é¡Œè™Ÿ ç­”æ¡ˆ
 				Map<Integer, String> qIdAnswerMap = mapper.readValue(item.getFillin(), new TypeReference<>() {
 				});
-				// lambda¼gªk
-				// quIdAndQuAnsMap¤¤ªºkey¬OÃD¸¹(»PqIdAnswerMapªºkey­È¬O¬Û¦Pªº)¡A©Ò¥H¦pªG¦³¡A´N¥iª¾¬O¦³¶ñ¼gµª®×
-//				quIdAndQuAnsMap: ¥]§t©Ò¦³ÃD¥Øªº½s¸¹
-//				qIdAnswerMap :¥u¥]§tµª®×ªº½s¸¹(k)
+				// lambdaå¯«æ³•
+				// quIdAndQuAnsMapä¸­çš„keyæ˜¯é¡Œè™Ÿ(èˆ‡qIdAnswerMapçš„keyå€¼æ˜¯ç›¸åŒçš„)ï¼Œæ‰€ä»¥å¦‚æœæœ‰ï¼Œå°±å¯çŸ¥æ˜¯æœ‰å¡«å¯«ç­”æ¡ˆ
+//				quIdAndQuAnsMap: åŒ…å«æ‰€æœ‰é¡Œç›®çš„ç·¨è™Ÿ
+//				qIdAnswerMap :åªåŒ…å«ç­”æ¡ˆçš„ç·¨è™Ÿ(k)
 				qIdAnswerMap.forEach((k, v) -> {
 					if (quIdAndQuAnsMap.containsKey(k)) {
-						// ³z¹Lk¨ú¥XquIdAndQuAnsMap¤¤ªº¹ïÀ³value
-						// ³o¸Ìªºmap¬O"ÃD¥Ø"»P"µª®×"ªºmap
+						// é€ékå–å‡ºquIdAndQuAnsMapä¸­çš„å°æ‡‰value
+						// é€™è£¡çš„mapæ˜¯"é¡Œç›®"èˆ‡"ç­”æ¡ˆ"çš„map
 						Map<String, String> map = quIdAndQuAnsMap.get(k);
-						// ¦]¬°ÃD¥Ø¤£ÅÜ¡A¤£¨ú¥N±¼¡A©Ò¥Hkey­Èºû«ù
+						// å› ç‚ºé¡Œç›®ä¸è®Šï¼Œä¸å–ä»£æ‰ï¼Œæ‰€ä»¥keyå€¼ç¶­æŒ
 						map.forEach((k1, v1) -> {
 							map.put(k1, v);
 						});
@@ -238,10 +238,10 @@ public class ResponseServiceImpl implements ResponseService {
 
 		/*
 		 * =============================================================================
-		 * ========= // ¥ı±N¸ê®Æ´£¨ú¥X¨Ó String quizGetName = quizGet.getName(); String
+		 * ========= // å…ˆå°‡è³‡æ–™æå–å‡ºä¾† String quizGetName = quizGet.getName(); String
 		 * quizGetDescription = quizGet.getDescription(); LocalDate quizGetStartDate =
-		 * quizGet.getStartDate(); LocalDate quizGetEndDate = quizGet.getEndDate(); // ±q
-		 * ResponseDao ¤¤¬d¸ß Response ¹ï¶H¦Cªí // List<Response> responses =
+		 * quizGet.getStartDate(); LocalDate quizGetEndDate = quizGet.getEndDate(); // å¾
+		 * ResponseDao ä¸­æŸ¥è©¢ Response å°è±¡åˆ—è¡¨ // List<Response> responses =
 		 * responseDao.findByAll(req.getQuizId()); List<Response> res =
 		 * responseDao.findAll();
 		 * 
@@ -263,13 +263,13 @@ public class ResponseServiceImpl implements ResponseService {
 	@Override
 	public TextRes text(TextReq req) {
 
-		// ±q QuizDao ¤¤¬d¸ß Quiz ¹ï¶H
+		// å¾ QuizDao ä¸­æŸ¥è©¢ Quiz å°è±¡
 		Optional<Quiz> op = quizDao.findById(req.getQuizId());
 		if (op.isEmpty()) {
 			return new TextRes(ResMessage.QUIZ_NOT_FOUND.getCode(), ResMessage.QUIZ_NOT_FOUND.getMessage());
 		}
 		Quiz quiz = op.get();
-		// ®Ú¾Ú quizId ¬d¸ß Response ¹ï¶H¦Cªí
+		// æ ¹æ“š quizId æŸ¥è©¢ Response å°è±¡åˆ—è¡¨
 		List<Response> responses = responseDao.findByQuizId(req.getQuizId());
 
 		String quizTitle = quiz.getName();
@@ -280,9 +280,9 @@ public class ResponseServiceImpl implements ResponseService {
 		String message = ResMessage.SUCCESS.getMessage();
 
 //        =====================================================
-//		Âà´«(¦r¦êÂàÃş§O©ÎÃş§OÂà¦r¦ê)
+//		è½‰æ›(å­—ä¸²è½‰é¡åˆ¥æˆ–é¡åˆ¥è½‰å­—ä¸²)
 		ObjectMapper mapper = new ObjectMapper();
-//		±q°İ¨÷¤¤´£¥X°İÃD(­ì¥»Ãş«¬¬O¦r¦ê¡A×ò¥L¬O¤@­Ó«Ü¦h«Ü¹y´£©Ò¥HÂà­¼list)
+//		å¾å•å·ä¸­æå‡ºå•é¡Œ(åŸæœ¬é¡å‹æ˜¯å­—ä¸²ï¼Œé…–ä»–æ˜¯ä¸€å€‹å¾ˆå¤šå¾ˆé “ææ‰€ä»¥è½‰ä¹˜list)
 		String question = quiz.getQuestions();
 //		List<Question> quList = mapper.readValue(question, new TypeReference<List<Question>>(){});
 		List<Question> quList = null;
@@ -296,16 +296,16 @@ public class ResponseServiceImpl implements ResponseService {
 		}
 		
 
-		// ³]¤@­Ó·sªºlist±N¸ê®Æ³£©ñ¶i¨Ó(¤]´N¹ïÀ³¤F§Ú­ÌtextResªº«¬ºA¤F)
+		// è¨­ä¸€å€‹æ–°çš„listå°‡è³‡æ–™éƒ½æ”¾é€²ä¾†(ä¹Ÿå°±å°æ‡‰äº†æˆ‘å€‘textResçš„å‹æ…‹äº†)
 		List<Text> textList = new ArrayList<>();
 
-		// Response¤¤¥]§t¤F°İÃD©Mµª®×
+		// Responseä¸­åŒ…å«äº†å•é¡Œå’Œç­”æ¡ˆ
 		for (Response response : responses) {
-			//¿é¤JªÌ¦W¤l
+			//è¼¸å…¥è€…åå­
 			String fillinName = response.getName();
 			String fillinPhone = response.getPhone();
 			
-			//µª®×¦bfillinList¤¤
+			//ç­”æ¡ˆåœ¨fillinListä¸­
 			String fillinStr = response.getFillin();
 			List<Fillin> fillinList = null;
 			try {
@@ -316,12 +316,12 @@ public class ResponseServiceImpl implements ResponseService {
 			}
 			
 
-			//§Q«K§Úªº°İÃD(¦]¬°°İÃDQuestion¤¤§t¦³"ÃD¥Øid"¤Î"ÃD¥Ø")¡A¦pªG¥u¥ÎResponse§Ú¬O¨ú¤£¨ì°İ¨÷¸Ì­±§ó¸Ô²Óªº¸ê®Æ
+			//åˆ©ä¾¿æˆ‘çš„å•é¡Œ(å› ç‚ºå•é¡ŒQuestionä¸­å«æœ‰"é¡Œç›®id"åŠ"é¡Œç›®")ï¼Œå¦‚æœåªç”¨Responseæˆ‘æ˜¯å–ä¸åˆ°å•å·è£¡é¢æ›´è©³ç´°çš„è³‡æ–™
 				for(Fillin ansItem:fillinList) {
-					//¦b°j°é¤º·s«Ø¤@­Ó·sªºtextªº¥Øªº¬O¬°¤F : Åı¨C­Ótext¥Í¦¨®É³£¬O¿W¥ßªº¡A¥B¸Ì­±¥]§tªº¤¸¯À¦b«K§Q®É³£·|¥[¶i¨Ó
+					//åœ¨è¿´åœˆå…§æ–°å»ºä¸€å€‹æ–°çš„textçš„ç›®çš„æ˜¯ç‚ºäº† : è®“æ¯å€‹textç”Ÿæˆæ™‚éƒ½æ˜¯ç¨ç«‹çš„ï¼Œä¸”è£¡é¢åŒ…å«çš„å…ƒç´ åœ¨ä¾¿åˆ©æ™‚éƒ½æœƒåŠ é€²ä¾†
 					Text text = new Text();
-					//¦]¬°§Ú¦b§ÚªºText¤¤¦³³]¸mset¡A©Ò¥H­È¬O¥i¥H§ó°Êªº
-					//µM«á¦A±N§Ú©Ò»İ­nªº­Èget¥X¨Ó©ñ¤Jset
+					//å› ç‚ºæˆ‘åœ¨æˆ‘çš„Textä¸­æœ‰è¨­ç½®setï¼Œæ‰€ä»¥å€¼æ˜¯å¯ä»¥æ›´å‹•çš„
+					//ç„¶å¾Œå†å°‡æˆ‘æ‰€éœ€è¦çš„å€¼getå‡ºä¾†æ”¾å…¥set
 					text.setQuizName(quizTitle);
 					text.setDescription(quizDescription);
 					text.setStartDate(quizStartDate);
@@ -334,29 +334,29 @@ public class ResponseServiceImpl implements ResponseService {
 					text.setQuId(ansItem.getqId());
 					text.setTitle(ansItem.getQuestion());
 					
-					//¦]¬°µª®×ªºkey¤]¬O¸òqustionªºid¨«ªº
-					//±qResponse¤¤§ì¨úMap<k(ÃD¥Ø½s¸¹),v(µª®×)>
-					//µM«á¦]¬°ÃD¥Ø½s¸¹(key­È)µ¥©óQuestionªºid
+					//å› ç‚ºç­”æ¡ˆçš„keyä¹Ÿæ˜¯è·Ÿqustionçš„idèµ°çš„
+					//å¾Responseä¸­æŠ“å–Map<k(é¡Œç›®ç·¨è™Ÿ),v(ç­”æ¡ˆ)>
+					//ç„¶å¾Œå› ç‚ºé¡Œç›®ç·¨è™Ÿ(keyå€¼)ç­‰æ–¼Questionçš„id
 //					String answer = fillinStr.get(item.getId);
 					text.setAns(ansItem.getAnswer());
 
-					//±N¶ñ¥R¦nªºtext¥[¨ìtextList¤¤(¦]¬°text¤£¥u¤@µ§¡A©Ò¥H¤~¥Îlist)
+					//å°‡å¡«å……å¥½çš„textåŠ åˆ°textListä¸­(å› ç‚ºtextä¸åªä¸€ç­†ï¼Œæ‰€ä»¥æ‰ç”¨list)
 					textList.add(text);
 				}
 				
 				
 		}
 
-		// ³Ğ«Ø¤@­Ó·sªº½Ğ¨D¡A±N§Úªº­È³£¶ë¦^¥h¡A³o¼Ë§Úªºres¤~ºâ§¹¦¨
-		//¬°¬Æ»òtextListÁÙ¤£ºâ§¹¦¨©O? 
-		//¦]¬°textList¨S¦³set¦^§ÚªºtextRes¡A³o¼Ë·|¦¨[]¡A©Ò¥H°O±o¶ë¦^¥h
-		//¦]¬°§Úªº½Ğ¨D¬O(public ""TextRes"" text(TextReq req))
-		//¦pªG§Úªº½Ğ¨DÅÜ¦¨¤F Text ¨º§Ú´N¥i¥Hª½±µªğ¦^¨º­Ólist<Text>
+		// å‰µå»ºä¸€å€‹æ–°çš„è«‹æ±‚ï¼Œå°‡æˆ‘çš„å€¼éƒ½å¡å›å»ï¼Œé€™æ¨£æˆ‘çš„resæ‰ç®—å®Œæˆ
+		//ç‚ºç”šéº¼textListé‚„ä¸ç®—å®Œæˆå‘¢? 
+		//å› ç‚ºtextListæ²’æœ‰setå›æˆ‘çš„textResï¼Œé€™æ¨£æœƒæˆ[]ï¼Œæ‰€ä»¥è¨˜å¾—å¡å›å»
+		//å› ç‚ºæˆ‘çš„è«‹æ±‚æ˜¯(public ""TextRes"" text(TextReq req))
+		//å¦‚æœæˆ‘çš„è«‹æ±‚è®Šæˆäº† Text é‚£æˆ‘å°±å¯ä»¥ç›´æ¥è¿”å›é‚£å€‹list<Text>
 		TextRes textRes = new TextRes();
 		textRes.setCode(code);
 		textRes.setMessage(message);
 		textRes.setText(textList);
-		//¥i¥Hª½±µ¼g return new TextRes(code,message,textList);(¥i³»´À345~348¡B350)
+		//å¯ä»¥ç›´æ¥å¯« return new TextRes(code,message,textList);(å¯é ‚æ›¿345~348ã€350)
 		return textRes;
 	}
 }

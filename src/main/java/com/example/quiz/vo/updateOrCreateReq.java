@@ -19,12 +19,12 @@ public class updateOrCreateReq {
 	@JsonProperty("end_date")
 	private LocalDate endDate;
 
-//	°İ¨÷¤£¥u¤@­Ó°İÃD¡A©Ò¥H¥i¥Hµ¹¥L²Õ¦¨¤@­Óª«¥ó¡A¨Ã¥Îlist¥]°_¨Ó
+//	å•å·ä¸åªä¸€å€‹å•é¡Œï¼Œæ‰€ä»¥å¯ä»¥çµ¦ä»–çµ„æˆä¸€å€‹ç‰©ä»¶ï¼Œä¸¦ç”¨liståŒ…èµ·ä¾†
 	@JsonProperty("question_list")
 	private List<Question> questionList;
 
 	@JsonProperty("is_published")
-	private boolean published;// ¬O§_­nÀx¦s(¶ÈÀx¦s/Àx¦s¨Ãµo¥¬)
+	private boolean published;// æ˜¯å¦è¦å„²å­˜(åƒ…å„²å­˜/å„²å­˜ä¸¦ç™¼å¸ƒ)
 
 	public updateOrCreateReq() {
 		super();

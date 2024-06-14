@@ -9,13 +9,13 @@ public class DeleteReq {
 	@JsonProperty("id_List")
 	private List<Integer> idList;
 
-//	箇砞篶よ猭
+//	闋愯ō寤烘鏂规硶
 	public DeleteReq() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-//	Τ把计篶よ猭
+//	鏈夊弮鏁哥殑寤烘鏂规硶
 	public DeleteReq(List<Integer> idList) {
 		super();
 		this.idList = idList;

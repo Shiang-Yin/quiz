@@ -5,13 +5,13 @@ public class Fillin {
 	// question_id
 	private int qId;
 
-	//¼ĞÃD
+	//æ¨™é¡Œ
 	private String title;
 
-	//°İÃDªº¿ï¾Ü
+	//å•é¡Œçš„é¸æ“‡
 	private String question;
 
-	//µª®×
+	//ç­”æ¡ˆ
 	private String answer;
 
 	private String type;
