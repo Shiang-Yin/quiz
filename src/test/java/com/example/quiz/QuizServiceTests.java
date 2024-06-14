@@ -145,5 +145,7 @@ public class QuizServiceTests {
 		quizService.updateOrCreate(new updateOrCreateReq("syso更新無id?","syso更新?",LocalDate.of(2024, 8, 1),//
 				LocalDate.of(2024, 10, 1),questionList,true));
 		
+		System.out.println("=======================");
+		
 	}
 }
