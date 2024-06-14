@@ -22,130 +22,129 @@ public class QuizServiceTests {
 
 	@Autowired
 	private QuizService quizService;
-	
+
 	@Autowired
 	private QuizDao quizDao;
-	
+
 	@Test
 	public void createTest() {
-		List<Question> questionList=new ArrayList<>();
-		questionList.add(new Question(1,"°·±dÀ\?","ªQ¨Á½Ş;¬µ½Ş±Æ;·Î³½;¯NÂû»L",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(2,"¤¦¤¦?","¤@¸¹À\;¤G¸¹À\;¤T¸¹À\;¥|¸¹À\",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(3,"ª£¶º?","½Ş¦×ª£¶º;®üÂAª£¶º;¤z¨©°¨¹aÁ¦;ºî¦Xª£¶º",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		
-		CreateReq req = new CreateReq("±ßÀ\¦YÔ£?","¤ÈÀ\¦YÔ£?",LocalDate.of(2024, 6, 1),//
-				LocalDate.of(2024, 6, 1),questionList,true);
+		List<Question> questionList = new ArrayList<>();
+		questionList.add(new Question(1, "å¥åº·é¤?", "æ¾é˜ªè±¬;ç‚¸è±¬æ’;ç…é­š;çƒ¤é›è…¿", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(2, "ä¸¹ä¸¹?", "ä¸€è™Ÿé¤;äºŒè™Ÿé¤;ä¸‰è™Ÿé¤;å››è™Ÿé¤", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(3, "ç‚’é£¯?", "è±¬è‚‰ç‚’é£¯;æµ·é®®ç‚’é£¯;å¹²è²é¦¬éˆ´è–¯;ç¶œåˆç‚’é£¯", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+
+		CreateReq req = new CreateReq("æ™šé¤åƒå•¥?", "åˆé¤åƒå•¥?", LocalDate.of(2024, 6, 1), //
+				LocalDate.of(2024, 6, 1), questionList, true);
 		BasicRes res = quizService.create(req);
-//		Assert.isTrue ¦³ºØ¤Ï¸qªº·N«ä¡A¤]´N¬O»¡¡A·í§Ú¤£µ¥©ó200®É¡A¦^¶Çfalse
-//		©Ò¥HAssert.isTrue(false,"message")¤¤ªºfalse¬O"¤£¬°true®É©ß¥X²§±`"
-//		´ú¸Õªº®É­Ô¨Ï¥Î¡A¥i«O¯d¥i¤£«O¯d
-//		§¹¾ã´ú¸Õ´N¬O"¦³¦h¤ÖÅŞ¿è§PÂ_³£»İ­n°µÀË¬d"¡A§¹¾ã´ú¸Õ¤SºÙ"³æ¤¸´ú¸Õunit"=>¥D­n¬O­n¬İÅŞ¿è¬O§_¦³»~
-		Assert.isTrue(res.getCode()==200, "create test false!!");
-//		»İ­n§R°£´ú¸Õ¸ê®Æ¡A¦³¨âºØ°µªkTODO
+//		Assert.isTrue æœ‰ç¨®åç¾©çš„æ„æ€ï¼Œä¹Ÿå°±æ˜¯èªªï¼Œç•¶æˆ‘ä¸ç­‰æ–¼200æ™‚ï¼Œå›å‚³false
+//		æ‰€ä»¥Assert.isTrue(false,"message")ä¸­çš„falseæ˜¯"ä¸ç‚ºtrueæ™‚æ‹‹å‡ºç•°å¸¸"
+//		æ¸¬è©¦çš„æ™‚å€™ä½¿ç”¨ï¼Œå¯ä¿ç•™å¯ä¸ä¿ç•™
+//		å®Œæ•´æ¸¬è©¦å°±æ˜¯"æœ‰å¤šå°‘é‚è¼¯åˆ¤æ–·éƒ½éœ€è¦åšæª¢æŸ¥"ï¼Œå®Œæ•´æ¸¬è©¦åˆç¨±"å–®å…ƒæ¸¬è©¦unit"=>ä¸»è¦æ˜¯è¦çœ‹é‚è¼¯æ˜¯å¦æœ‰èª¤
+		Assert.isTrue(res.getCode() == 200, "create test false!!");
+//		éœ€è¦åˆªé™¤æ¸¬è©¦è³‡æ–™ï¼Œæœ‰å…©ç¨®åšæ³•TODO
 //		quizDao.deleteById(null);
-		
+
 	}
-	
-//	********ÀË¬d¦W¤l¿ù»~************
+
+//	********æª¢æŸ¥åå­éŒ¯èª¤************
 	@Test
 	public void createNameErrorTest() {
-		List<Question> questionList=new ArrayList<>();
-		questionList.add(new Question(1,"°·±dÀ\?","ªQ¨Á½Ş;¬µ½Ş±Æ;·Î³½;¯NÂû»L",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(2,"¤¦¤¦?","¤@¸¹À\;¤G¸¹À\;¤T¸¹À\;¥|¸¹À\",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(3,"ª£¶º?","½Ş¦×ª£¶º;®üÂAª£¶º;¤z¨©°¨¹aÁ¦;ºî¦Xª£¶º",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		
-		CreateReq req = new CreateReq("","¤ÈÀ\¦YÔ£?",LocalDate.of(2024, 6, 1),//
-				LocalDate.of(2024, 6, 1),questionList,true);
+		List<Question> questionList = new ArrayList<>();
+		questionList.add(new Question(1, "å¥åº·é¤?", "æ¾é˜ªè±¬;ç‚¸è±¬æ’;ç…é­š;çƒ¤é›è…¿", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(2, "ä¸¹ä¸¹?", "ä¸€è™Ÿé¤;äºŒè™Ÿé¤;ä¸‰è™Ÿé¤;å››è™Ÿé¤", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(3, "ç‚’é£¯?", "è±¬è‚‰ç‚’é£¯;æµ·é®®ç‚’é£¯;å¹²è²é¦¬éˆ´è–¯;ç¶œåˆç‚’é£¯", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+
+		CreateReq req = new CreateReq("", "åˆé¤åƒå•¥?", LocalDate.of(2024, 6, 1), //
+				LocalDate.of(2024, 6, 1), questionList, true);
 		BasicRes res = quizService.create(req);
-//		Assert.isTrue ¦³ºØ¤Ï¸qªº·N«ä¡A¤]´N¬O»¡¡A·í§Ú¤£µ¥©ó200®É¡A¦^¶Çfalse
-//		©Ò¥HAssert.isTrue(false,true"message")¤¤ªºfalse¬O"¤£¬°true®É©ß¥X²§±`"(true®ÉÅã¥Ü¡A"message")
-//		´ú¸Õªº®É­Ô¨Ï¥Î¡A¥i«O¯d¥i¤£«O¯d
+//		Assert.isTrue æœ‰ç¨®åç¾©çš„æ„æ€ï¼Œä¹Ÿå°±æ˜¯èªªï¼Œç•¶æˆ‘ä¸ç­‰æ–¼200æ™‚ï¼Œå›å‚³false
+//		æ‰€ä»¥Assert.isTrue(false,true"message")ä¸­çš„falseæ˜¯"ä¸ç‚ºtrueæ™‚æ‹‹å‡ºç•°å¸¸"(trueæ™‚é¡¯ç¤ºï¼Œ"message")
+//		æ¸¬è©¦çš„æ™‚å€™ä½¿ç”¨ï¼Œå¯ä¿ç•™å¯ä¸ä¿ç•™
 //		Assert.isTrue(res.getCode()==400, "create test false!!");
-//		³o¸Ìres.getMessage().equalsIgnoreCase("Param name error!!")¤¤
-//		ªº"Param name error!!"¥²¶·­n¸òResMessage¤¤ªºmessage¬O¤@¼Ëªº¡A¥u­n¦³¤£¤@¼Ë¤@¼Ë·|¥X¿ù³á~
+//		é€™è£¡res.getMessage().equalsIgnoreCase("Param name error!!")ä¸­
+//		çš„"Param name error!!"å¿…é ˆè¦è·ŸResMessageä¸­çš„messageæ˜¯ä¸€æ¨£çš„ï¼Œåªè¦æœ‰ä¸ä¸€æ¨£ä¸€æ¨£æœƒå‡ºéŒ¯å–”~
 		Assert.isTrue(res.getMessage().equalsIgnoreCase("Param name error!!"), //
 				"create test false!!");
-		
+
 	}
-	
-	
-//	********ÀË¬d¤é´Á¿ù»~************
+
+//	********æª¢æŸ¥æ—¥æœŸéŒ¯èª¤************
 	@Test
 	public void createDateErrorTest() {
-		List<Question> questionList=new ArrayList<>();
-		questionList.add(new Question(1,"°·±dÀ\?","ªQ¨Á½Ş;¬µ½Ş±Æ;·Î³½;¯NÂû»L",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(2,"¤¦¤¦?","¤@¸¹À\;¤G¸¹À\;¤T¸¹À\;¥|¸¹À\",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		questionList.add(new Question(3,"ª£¶º?","½Ş¦×ª£¶º;®üÂAª£¶º;¤z¨©°¨¹aÁ¦;ºî¦Xª£¶º",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		
-		CreateReq req = new CreateReq("¤ÈÀ\¦YÔ£?","¤ÈÀ\¦YÔ£?",LocalDate.of(2024,5, 30),//
-				LocalDate.of(2024, 6, 30),questionList,true);
+		List<Question> questionList = new ArrayList<>();
+		questionList.add(new Question(1, "å¥åº·é¤?", "æ¾é˜ªè±¬;ç‚¸è±¬æ’;ç…é­š;çƒ¤é›è…¿", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(2, "ä¸¹ä¸¹?", "ä¸€è™Ÿé¤;äºŒè™Ÿé¤;ä¸‰è™Ÿé¤;å››è™Ÿé¤", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+		questionList.add(new Question(3, "ç‚’é£¯?", "è±¬è‚‰ç‚’é£¯;æµ·é®®ç‚’é£¯;å¹²è²é¦¬éˆ´è–¯;ç¶œåˆç‚’é£¯", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+
+		CreateReq req = new CreateReq("åˆé¤åƒå•¥?", "åˆé¤åƒå•¥?", LocalDate.of(2024, 5, 30), //
+				LocalDate.of(2024, 6, 30), questionList, true);
 		BasicRes res = quizService.create(req);
-//		Assert.isTrue ¦³ºØ¤Ï¸qªº·N«ä¡A¤]´N¬O»¡¡A·í§Ú¤£µ¥©ó200®É¡A¦^¶Çfalse
-//		©Ò¥HAssert.isTrue(false,"message")¤¤ªºfalse¬O"¤£¬°true®É©ß¥X²§±`"
-//		´ú¸Õªº®É­Ô¨Ï¥Î¡A¥i«O¯d¥i¤£«O¯d
+//		Assert.isTrue æœ‰ç¨®åç¾©çš„æ„æ€ï¼Œä¹Ÿå°±æ˜¯èªªï¼Œç•¶æˆ‘ä¸ç­‰æ–¼200æ™‚ï¼Œå›å‚³false
+//		æ‰€ä»¥Assert.isTrue(false,"message")ä¸­çš„falseæ˜¯"ä¸ç‚ºtrueæ™‚æ‹‹å‡ºç•°å¸¸"
+//		æ¸¬è©¦çš„æ™‚å€™ä½¿ç”¨ï¼Œå¯ä¿ç•™å¯ä¸ä¿ç•™
 //		Assert.isTrue(res.getCode()==400, "create test false!!");
 		Assert.isTrue(res.getMessage().equalsIgnoreCase("Param start Date not null!!"), //
 				"create test false!!");
-		
+
 	}
-	
-//	¦X¨Ö¤jªk~~~
+
+//	åˆä½µå¤§æ³•~~~
 	@Test
 	public void createTest1() {
-		List<Question> questionList=new ArrayList<>();
-		questionList.add(new Question(1,"°·±dÀ\?","ªQ¨Á½Ş;¬µ½Ş±Æ;·Î³½;¯NÂû»L",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		
-//		´ú¸Õname erroe		
-		CreateReq req = new CreateReq("","¤ÈÀ\¦YÔ£?",LocalDate.of(2024, 6, 1),//
-				LocalDate.of(2024, 6, 1),questionList,true);
+		List<Question> questionList = new ArrayList<>();
+		questionList.add(new Question(1, "å¥åº·é¤?", "æ¾é˜ªè±¬;ç‚¸è±¬æ’;ç…é­š;çƒ¤é›è…¿", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+
+//		æ¸¬è©¦name erroe		
+		CreateReq req = new CreateReq("", "åˆé¤åƒå•¥?", LocalDate.of(2024, 6, 1), //
+				LocalDate.of(2024, 6, 1), questionList, true);
 		BasicRes res = quizService.create(req);
 		Assert.isTrue(res.getMessage().equalsIgnoreCase("Param name error!!"), //
 				"create test false!!");
-		
-//		´ú¸Õstart date error
-//		°²³]¤µ¤Ñ¬O2024/05/30¡A©Ò¥H¶}©l¤é´Á¤£¯à¬O¤µ¤Ñ ©ÎªÌ¬O¤µ¤Ñ¤§«e
-		req = new CreateReq("¤ÈÀ\¦YÔ£?","¤ÈÀ\¦YÔ£?",LocalDate.of(2024,5,30),//
-				LocalDate.of(2024, 6, 1),questionList,true);
+
+//		æ¸¬è©¦start date error
+//		å‡è¨­ä»Šå¤©æ˜¯2024/05/30ï¼Œæ‰€ä»¥é–‹å§‹æ—¥æœŸä¸èƒ½æ˜¯ä»Šå¤© æˆ–è€…æ˜¯ä»Šå¤©ä¹‹å‰
+		req = new CreateReq("åˆé¤åƒå•¥?", "åˆé¤åƒå•¥?", LocalDate.of(2024, 5, 30), //
+				LocalDate.of(2024, 6, 1), questionList, true);
 		res = quizService.create(req);
 		Assert.isTrue(res.getMessage().equalsIgnoreCase("Param start Date error!!"), //
 				"create test false!!");
-		
-//		´ú¸Õend deate error
-//		µ²§ô¤é´Á¤£¯à¤ñ¶}©l¤é´Á¦­
-		req = new CreateReq("¤ÈÀ\¦YÔ£?","¤ÈÀ\¦YÔ£?",LocalDate.of(2024,6,1),//
-				LocalDate.of(2024,5, 1),questionList,true);
+
+//		æ¸¬è©¦end deate error
+//		çµæŸæ—¥æœŸä¸èƒ½æ¯”é–‹å§‹æ—¥æœŸæ—©
+		req = new CreateReq("åˆé¤åƒå•¥?", "åˆé¤åƒå•¥?", LocalDate.of(2024, 6, 1), //
+				LocalDate.of(2024, 5, 1), questionList, true);
 		res = quizService.create(req);
 		Assert.isTrue(res.getMessage().equalsIgnoreCase("Param end Date error!!"), //
 				"create test false!!");
-		
-//		¦pªGÅŞ¿è§PÂ_¥ş³£§PÂ_§¹¤F¤§«á¡A³Ì«á¤~·|´ú¸Õ¡A"¦¨¥\ªº±¡¹Ò"
-		req = new CreateReq("¦YÔ£?","¦YÔ£?",LocalDate.of(2024, 6, 1),//
-				LocalDate.of(2024, 6, 1),questionList,true);
+
+//		å¦‚æœé‚è¼¯åˆ¤æ–·å…¨éƒ½åˆ¤æ–·å®Œäº†ä¹‹å¾Œï¼Œæœ€å¾Œæ‰æœƒæ¸¬è©¦ï¼Œ"æˆåŠŸçš„æƒ…å¢ƒ"
+		req = new CreateReq("åƒå•¥?", "åƒå•¥?", LocalDate.of(2024, 6, 1), //
+				LocalDate.of(2024, 6, 1), questionList, true);
 		res = quizService.create(req);
-		Assert.isTrue(res.getCode()==200, "create test false!!");
-		
+		Assert.isTrue(res.getCode() == 200, "create test false!!");
+
 	}
-	
+
 	@Test
 	public void createOrUpdateTest() {
-		List<Question> questionList=new ArrayList<>();
-		questionList.add(new Question(5,"°·±dÀ\?","ªQ¨Á½Ş;¬µ½Ş±Æ;·Î³½;¯NÂû»L",//
-				OptionType.SINGLE_CHOICE.getType(),true));
-		
-		quizService.updateOrCreate(new updateOrCreateReq("syso§ó·sµLid?","syso§ó·s?",LocalDate.of(2024, 8, 1),//
-				LocalDate.of(2024, 10, 1),questionList,true));
-		
+		List<Question> questionList = new ArrayList<>();
+		questionList.add(new Question(5, "å¥åº·é¤?", "æ¾é˜ªè±¬;ç‚¸è±¬æ’;ç…é­š;çƒ¤é›è…¿", //
+				OptionType.SINGLE_CHOICE.getType(), true));
+
+		quizService.updateOrCreate(new updateOrCreateReq("sysoæ›´æ–°ç„¡id?", "sysoæ›´æ–°?", LocalDate.of(2024, 8, 1), //
+				LocalDate.of(2024, 10, 1), questionList, true));
+
 		System.out.println("=======================");
-		
+
 	}
 }

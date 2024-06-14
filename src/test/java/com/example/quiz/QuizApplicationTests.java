@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import com.example.quiz.entity.Quiz;
 import com.example.quiz.repository.QuizDao;
 import com.example.quiz.vo.Question;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -29,16 +27,16 @@ class QuizApplicationTests {
 
 	@Test
 	public void test1() {
-		List<Quiz> res = quizDao.findByDescriptionContaining("ª÷¯ù¤È");
+		List<Quiz> res = quizDao.findByDescriptionContaining("é‡‘èŒ¶åˆ");
 		System.out.println(res.size());
 	}
 	
 	@Test
 	public void containsTest() {
-		String str = "AB;B;C;D"; //¿ï¶µ
-		String strAns = "A;AB;E" ; //µª®×
-		String[] strArr = str.split(";"); //¿ï¶µ¤À³Î ["AB" ,"B","C","D"]
-		String[] strAnsArr = strAns.split(";"); //µª®×¤À³Î ["A","AB","E"]
+		String str = "AB;B;C;D"; //é¸é …
+		String strAns = "A;AB;E" ; //ç­”æ¡ˆ
+		String[] strArr = str.split(";"); //é¸é …åˆ†å‰² ["AB" ,"B","C","D"]
+		String[] strAnsArr = strAns.split(";"); //ç­”æ¡ˆåˆ†å‰² ["A","AB","E"]
 		List<String> strList=List.of(strArr);
 		for(String item:strAnsArr) {
 			System.out.println(item + ":" + strList.contains(item));
@@ -48,8 +46,8 @@ class QuizApplicationTests {
 	@Test
 	public void objectMapperTest() {
 		
-		String str = "[{\"id\":1,\"title\":\"¯Â¯ùÃş\",\"options\":\"¬õ¯ù;ºñ¯ù;¯QÀs;«C¯ù\",\"type\":\"³æ¿ï\",\"is_necessary\":true}]";
-		String strq = "{\"id\":1,\"title\":\"¯Â¯ùÃş\",\"options\":\"¬õ¯ù;ºñ¯ù;¯QÀs;«C¯ù\",\"type\":\"³æ¿ï\",\"is_necessary\":true}";
+		String str = "[{\"id\":1,\"title\":\"ç´”èŒ¶é¡\",\"options\":\"ç´…èŒ¶;ç¶ èŒ¶;çƒé¾;é’èŒ¶\",\"type\":\"å–®é¸\",\"is_necessary\":true}]";
+		String strq = "{\"id\":1,\"title\":\"ç´”èŒ¶é¡\",\"options\":\"ç´…èŒ¶;ç¶ èŒ¶;çƒé¾;é’èŒ¶\",\"type\":\"å–®é¸\",\"is_necessary\":true}";
 		
 		ObjectMapper mapper = new ObjectMapper();
 //		List<Question> list = mapper.readValue(str, List.class);
@@ -81,9 +79,9 @@ class QuizApplicationTests {
 		System.out.println(bList);
 		
 		if(aList.equals(bList)) {
-			System.out.println("¬Ûµ¥");
+			System.out.println("ç›¸ç­‰");
 		}else {
-			System.out.println("¤£¬Ûµ¥");
+			System.out.println("ä¸ç›¸ç­‰");
 		}
 	}
 	
@@ -92,16 +90,16 @@ class QuizApplicationTests {
 		List<String> list=List.of("A","B","C","D","E");
 		String str="AAJBBBCEBEAADCDEIH";
 		
-		//¤èªk¤@
+		//æ–¹æ³•ä¸€
 		for(String item:list) {
 			
 			System.out.println(item);
 			int oldCount = str.length();
 			int newCount = str.replace(item, "").length();
-			System.out.println(item+"¥X²{"+(oldCount - newCount));
+			System.out.println(item+"å‡ºç¾"+(oldCount - newCount));
 		}
 		
-		//¤èªk¤G(ÁÙ¨S¸Ñ§¹)
+		//æ–¹æ³•äºŒ(é‚„æ²’è§£å®Œ)
 ////		Map<Character, Long> charCountMap = new HashMap<>();
 //		Map<Character, Long> charCountMap = str.chars()
 //		        .mapToObj(c -> (char) c)
@@ -120,14 +118,14 @@ class QuizApplicationTests {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		List<String> ansList=new ArrayList<String>();
-//		°²³]§Ú²{¦b¦³«Ü¦hÃDªºµª®×
-		ansList.add("¬õ¯ù");
-		ansList.add("ºñ¯ù");
-		ansList.add("¬õ¯ù®³ÅK");
+//		å‡è¨­æˆ‘ç¾åœ¨æœ‰å¾ˆå¤šé¡Œçš„ç­”æ¡ˆ
+		ansList.add("ç´…èŒ¶");
+		ansList.add("ç¶ èŒ¶");
+		ansList.add("ç´…èŒ¶æ‹¿éµ");
 		System.out.println(ansList);
 		
 
-		List<String> str=List.of("ºñ¯ù","ºñ¯ù®³ÅK","¬õ¯ù","ºñ¯ù","¬õ¯ù®³ÅK");
+		List<String> str=List.of("ç¶ èŒ¶","ç¶ èŒ¶æ‹¿éµ","ç´…èŒ¶","ç¶ èŒ¶","ç´…èŒ¶æ‹¿éµ");
 		List<String> list=new ArrayList<String>();
 		for(String item:str) {
 			list.add(item);
@@ -136,15 +134,15 @@ class QuizApplicationTests {
 		
 		Map<String, Integer> countMap = new HashMap<>();
         
-        // ­pºâ¥X²{¦¸¼Æ
+        // è¨ˆç®—å‡ºç¾æ¬¡æ•¸
         for (String s : list) {
             countMap.put(s, countMap.getOrDefault(s, 0) + 1);
         }
 
-        // ¥´¦Lµ²ªG
+        // æ‰“å°çµæœ
         for (String s : ansList) {
             int count = countMap.getOrDefault(s, 0);
-            System.out.println(s + " ¥X²{ " + count + " ¦¸");
+            System.out.println(s + " å‡ºç¾ " + count + " æ¬¡");
 
         }
 	}
