@@ -4,7 +4,8 @@ public enum OptionType {
 
 	SINGLE_CHOICE("單選"),//
 	MULIT_CHOICE("多選"),//
-	TEXT("文字")
+	TEXT("文字"),//
+	TEXTEN("text")
 	;
 	
 	private String type;

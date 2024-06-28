@@ -1,15 +1,25 @@
 package com.example.quiz.vo;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Question {
 
+	//@Min(value=0): 表示id的是數值要大於等於0
+	@Min(value = 1,message = "Param question id error!!")
+	@NotNull(message = "Param question id error!!")
 	private int id;
 
+	@NotBlank(message ="Param question title error!!")
 	private String title;
 
+	
 	private String options;
 
+	@NotBlank(message = "Param question type error!!")
 	private String type;
 
 	@JsonProperty("is_necessary")

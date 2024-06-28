@@ -24,6 +24,8 @@ import com.example.quiz.vo.FeedbackRes;
 import com.example.quiz.vo.Fillin;
 import com.example.quiz.vo.FillinReq;
 import com.example.quiz.vo.Question;
+import com.example.quiz.vo.ResponseReq;
+import com.example.quiz.vo.ResponseRes;
 import com.example.quiz.vo.Text;
 import com.example.quiz.vo.TextReq;
 import com.example.quiz.vo.TextRes;
@@ -260,7 +262,8 @@ public class ResponseServiceImpl implements ResponseService {
 //		return new FeedbackRes(ResMessage.SUCCESS.getCode(), ResMessage.SUCCESS.getMessage(), feedbackDetail);
 	}
 
-	@Override
+
+/*	@Override
 	public TextRes text(TextReq req) {
 
 		// 從 QuizDao 中查詢 Quiz 對象
@@ -358,5 +361,36 @@ public class ResponseServiceImpl implements ResponseService {
 		textRes.setText(textList);
 		//可以直接寫 return new TextRes(code,message,textList);(可頂替345~348、350)
 		return textRes;
+	}*/
+	
+	
+	@Override
+	public ResponseRes res(ResponseReq req) {
+		ObjectMapper mapper = new ObjectMapper();
+		// 從 QuizDao 中查詢 Quiz 對象
+		Optional<Quiz> quiz = quizDao.findById(req.getId());
+		if (quiz.isEmpty()) {
+			return new ResponseRes(ResMessage.QUIZ_NOT_FOUND.getCode(), ResMessage.QUIZ_NOT_FOUND.getMessage());
+		}
+		Quiz quizGet = quiz.get();
+		List<Response> responseList=new ArrayList<>();
+		
+		List<Response> resList = responseDao.findByQuizId(req.getId());
+		for(Response item:resList) {
+			Response response = new  Response();
+			response.setId(item.getId());
+			response.setQuizId(item.getQuizId());
+			response.setName(item.getName());
+			response.setPhone(item.getPhone());
+			response.setEmail(item.getEmail());
+			response.setAge(item.getAge());
+			response.setFillin(item.getFillin());
+			response.setFillinDateTime(item.getFillinDateTime());
+			responseList.add(response);
+			
+		}
+		
+		return new ResponseRes(ResMessage.SUCCESS.getCode(), ResMessage.SUCCESS.getMessage(),responseList);
 	}
+
 }

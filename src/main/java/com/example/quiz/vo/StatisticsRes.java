@@ -23,7 +23,8 @@ public class StatisticsRes extends BasicRes {
 
 	// 當題目為文字時
 //	private Map<Integer, Map<String, String>> textStatistics;
-	private List<FeedbackText> feedbackText;
+//	private List<FeedbackText> feedbackText;
+	private Map<Integer, List<String>> textStatistics;
 
 	public StatisticsRes() {
 		super();
@@ -35,36 +36,26 @@ public class StatisticsRes extends BasicRes {
 		// TODO Auto-generated constructor stub
 	}
 
-	public StatisticsRes(int code, String message, int qId, String name, LocalDate starDate, LocalDate endDate,
-			Map<Integer, Map<String, Integer>> ansStatistics, List<FeedbackText> feedbackText) {
+	public StatisticsRes(int code, String message,int qId, String name, LocalDate starDate, LocalDate endDate,
+			Map<Integer, Map<String, Integer>> ansStatistics, Map<Integer, List<String>> textStatistics) {
 		super(code, message);
 		this.qId = qId;
 		this.name = name;
 		this.starDate = starDate;
 		this.endDate = endDate;
 		this.ansStatistics = ansStatistics;
-		this.feedbackText = feedbackText;
+		this.textStatistics = textStatistics;
 	}
-
-//	public StatisticsRes(int code, String message, int qId, String name, LocalDate starDate, LocalDate endDate,
-//			Map<Integer, Map<String, Integer>> ansStatistics, Map<Integer, Map<String, String>> textStatistics) {
-//		super(code, message);
-//		this.qId = qId;
-//		this.name = name;
-//		this.starDate = starDate;
-//		this.endDate = endDate;
-//		this.ansStatistics = ansStatistics;
-//		this.textStatistics = textStatistics;
-//	}
-
-	public StatisticsRes(int code, String message, int qId, String name, LocalDate starDate, LocalDate endDate,
-			Map<Integer, Map<String, Integer>> ansStatistics) {
-		super(code, message);
+	
+	public StatisticsRes(int qId, String name, LocalDate starDate, LocalDate endDate,
+			Map<Integer, Map<String, Integer>> ansStatistics, Map<Integer, List<String>> textStatistics) {
+		super();
 		this.qId = qId;
 		this.name = name;
 		this.starDate = starDate;
 		this.endDate = endDate;
 		this.ansStatistics = ansStatistics;
+		this.textStatistics = textStatistics;
 	}
 
 	public int getqId() {
@@ -107,20 +98,12 @@ public class StatisticsRes extends BasicRes {
 		this.ansStatistics = ansStatistics;
 	}
 
-	public List<FeedbackText> getFeedbackText() {
-		return feedbackText;
+	public Map<Integer, List<String>> getTextStatistics() {
+		return textStatistics;
 	}
 
-	public void setFeedbackText(List<FeedbackText> feedbackText) {
-		this.feedbackText = feedbackText;
+	public void setTextStatistics(Map<Integer, List<String>> textStatistics) {
+		this.textStatistics = textStatistics;
 	}
-
-//	public Map<Integer, Map<String, String>> getTextStatistics() {
-//		return textStatistics;
-//	}
-//
-//	public void setTextStatistics(Map<Integer, Map<String, String>> textStatistics) {
-//		this.textStatistics = textStatistics;
-//	}
 
 }

@@ -15,6 +15,5 @@ public interface ResponseDao extends JpaRepository<Response, Integer> {
 //	定義完之後回去impl，撈取資料
 	public List<Response> findByQuizId(int quizId);
 	
-	
 
 }

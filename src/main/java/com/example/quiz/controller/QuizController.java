@@ -1,5 +1,7 @@
 package com.example.quiz.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,7 +31,7 @@ public class QuizController {
 
 	//更新與創造
 	@PostMapping(value = "quiz/updateOrCreate")
-	public BasicRes updateOrCreate(@RequestBody updateOrCreateReq req) {
+	public BasicRes updateOrCreate(@Valid @RequestBody updateOrCreateReq req) {
 		return quizService.updateOrCreate(req);
 	}
 

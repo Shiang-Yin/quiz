@@ -22,10 +22,16 @@ dependencies {
 	
 	//mysql connector
 	implementation 'mysql:mysql-connector-java:8.0.31'
-	//Hot Deployment : ±M®×±Ò°Ê¤¤¡A­×§ïµ{¦¡½X¨ÃÀx¦s¤§«á¡A±M®×·|¦Û°Ê­«±Ò
+	//Hot Deployment :å°ˆæ¡ˆå•Ÿå‹•ä¸­ï¼Œè‹¥æœ‰ä¿®æ”¹è³‡è¨Šï¼Œå®ƒæœƒè‡ªå‹•å¹«æˆ‘å€‘é‡æ–°å•Ÿå‹•æ›´æ–°
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    //springfox starter maven(swagger API)
+    //implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    //springdoc openapi maven(open API)èˆ‡ä¸Šé¢é‚£ä¸€å€‹æ“‡ä¸€ä½¿ç”¨ï¼Œä¸ç„¶æœƒæœ‰è¡çª
+    implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
+    //validationè³‡æ–™é©—è­‰
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     
-    //testRuntimeOnly 'org.junit.platform:junit-platform-launcher'//¦pªG¥X²{²ö¦Wªº¬õ³L°C®É¥i¥H¸Õ¸Õ¬İ
+    //testRuntimeOnly 'org.junit.platform:junit-platform-launcher'//ï¿½pï¿½Gï¿½Xï¿½{ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½Cï¿½É¥iï¿½Hï¿½Õ¸Õ¬ï¿½
     
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	

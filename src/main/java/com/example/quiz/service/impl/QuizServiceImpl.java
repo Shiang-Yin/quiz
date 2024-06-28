@@ -325,48 +325,49 @@ public class QuizServiceImpl implements QuizService{
 	
 	private BasicRes checkParams(updateOrCreateReq req) {
 //		首先  先檢查問卷參數
-		if(!StringUtils.hasText(req.getName())) {
+		/*if(!StringUtils.hasText(req.getName())) {
 			return new BasicRes(ResMessage.PARAM_QUIZ_NAME_ERROR.getCode(),
 					ResMessage.PARAM_QUIZ_NAME_ERROR.getMessage());
 		}
 		if(!StringUtils.hasText(req.getDescription())) {
 			return new BasicRes(ResMessage.PARAM_DESCRIPTION_ERROR.getCode(),
 					ResMessage.PARAM_DESCRIPTION_ERROR.getMessage());
-		}
+		}*/
 //		開始時間不能在今天(含)之前
 //		(req中的開始時間不能早於[isBefore]今天(含[isEqual])之前)也可直接用isAfter(但要注意先後順序)
-		if(req.getStartDate()==null || !req.getStartDate().isAfter(LocalDate.now()) ) {
+		/*if(req.getStartDate()==null || !req.getStartDate().isAfter(LocalDate.now()) ) {
 			return new BasicRes(ResMessage.PARAM_STARDATE_ERROR.getCode(),
 					ResMessage.PARAM_STARDATE_ERROR.getMessage());
-		}
+		}*/
 //		檢查結束時間
-		if(req.getEndDate()==null || req.getEndDate().isBefore(req.getStartDate())) {
+		/*if(req.getEndDate()==null || req.getEndDate().isBefore(req.getStartDate())) {
 			return new BasicRes(ResMessage.PARAM_ENDDATE_ERROR.getCode(),
 					ResMessage.PARAM_ENDDATE_ERROR.getMessage());
-		}
+		}*/
+		/*
 //		檢查問題的參數
 		if(CollectionUtils.isEmpty(req.getQuestionList())) {
 			return new BasicRes(ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getCode(),
 					ResMessage.PARAM_QUESTION_LIST_NOT_FOUND.getMessage());
-		}
+		}*/
 //		一張問卷可能會有多個問題，所以要逐鼻檢查每一題的參數(所以用for)
 		for(Question item:req.getQuestionList()) {
-			if(item.getId()<=0) {
+			/*if(item.getId()<=0) {
 				return new BasicRes(ResMessage.PARAM_QUESTION_ID_ERROR.getCode(),
 						ResMessage.PARAM_QUESTION_ID_ERROR.getMessage());
-			}
-			if(!StringUtils.hasText(item.getTitle())) {
+			}*/
+			/*if(!StringUtils.hasText(item.getTitle())) {
 				return new BasicRes(ResMessage.PARAM_QUESTION_TITLE_ERROR.getCode(),
 						ResMessage.PARAM_QUESTION_TITLE_ERROR.getMessage());
-			}
+			}*/
 //			if(!StringUtils.hasText(item.getOptions())) {
 //				return new BasicRes(ResMessage.PARAM_QUESTION_CONTENT_ERROR.getCode(),
 //						ResMessage.PARAM_QUESTION_CONTENT_ERROR.getMessage());
 //			}
-			if( !StringUtils.hasText(item.getType())) {
+			/*if( !StringUtils.hasText(item.getType())) {
 				return new BasicRes(ResMessage.PARAM_QUESTION_TYPE_ERROR.getCode(),
 						ResMessage.PARAM_QUESTION_TYPE_ERROR.getMessage());
-			}
+			}*/
 //			type已經有做基本檢查了，但我們會因為類型不同而option也會有所不同
 //			當Option_type 是單選或多選時，option就不能是空字串(以下檢查單/多選條件下，如為空字串返回錯誤)
 //			但當option_type是文字時，則允許空字串

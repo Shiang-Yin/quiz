@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,31 +140,60 @@ public class FillinServiceImpl implements FillinServic {
 						}
 						if (!item.getType().equalsIgnoreCase(OptionType.TEXT.getType())) {
 
-							// 檢查答案
-							String answerStr = ans.getAnswer();
-							String[] answerArray = answerStr.split(";");
+							if (StringUtils.hasText(ans.getAnswer())) {
+	                            String answerStr = ans.getAnswer();
+	                            String[] answerArray = answerStr.split(";");
+	                            String[] optionArray = item.getOptions().split(";");
+	                            List<String> optionList = List.of(optionArray);
 
-							String[] optionArray = item.getOptions().split(";");
-							List<String> optionList = List.of(optionArray);
+	                            // 題型是單選且答案長度大於1時
+	                            if (item.getType().equalsIgnoreCase(OptionType.SINGLE_CHOICE.getType())
+	                                    && answerArray.length > 1) {
+	                                return new BasicRes(ResMessage.SHOOSE_ONE_ANSER.getCode(),
+	                                        ResMessage.SHOOSE_ONE_ANSER.getMessage());
+	                            }
 
-							// 題型是單選且答案長度大於1時
-							if (item.getType().equalsIgnoreCase(OptionType.SINGLE_CHOICE.getType())
-									&& answerArray.length > 1) {
-								return new BasicRes(ResMessage.SHOOSE_ONE_ANSER.getCode(),
-										ResMessage.SHOOSE_ONE_ANSER.getMessage());
-							}
+	                            for (String str : answerArray) {
+	                                if (!optionList.contains(str)) {
+	                                    // 添加日志记录
+	                                    System.out.println("非必填字段答案不匹配: " + str);
+	                                    System.out.println("可选项: " + optionList);
 
-							for (String str : answerArray) {
-								if (item.isNecessary() && !optionList.contains(str)) {
-									return new BasicRes(ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getCode(),
-											ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getMessage());
-								}
-								if (!item.isNecessary() && StringUtils.hasText(str) && !optionList.contains(str)) {
-									return new BasicRes(ResMessage.IS_NOT_MATCH.getCode(),
-											ResMessage.IS_NOT_MATCH.getMessage());
-								}
-							}
-						}
+	                                    return new BasicRes(item.isNecessary() ? ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getCode()
+	                                            : ResMessage.IS_NOT_MATCH.getCode(),
+	                                            item.isNecessary() ? ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getMessage()
+	                                            : ResMessage.IS_NOT_MATCH.getMessage());
+	                                }
+	                            }
+	                        }
+//							// 檢查答案
+//							String answerStr = ans.getAnswer();
+//							String[] answerArray = answerStr.split(";");
+//
+//							String[] optionArray = item.getOptions().split(";");
+//							List<String> optionList = List.of(optionArray);
+//
+//							// 題型是單選且答案長度大於1時
+//							if (item.getType().equalsIgnoreCase(OptionType.SINGLE_CHOICE.getType())
+//									&& answerArray.length > 1) {
+//								return new BasicRes(ResMessage.SHOOSE_ONE_ANSER.getCode(),
+//										ResMessage.SHOOSE_ONE_ANSER.getMessage());
+//							}
+//
+//							for (String str : answerArray) {
+//								if (item.isNecessary() && !optionList.contains(str)) {
+//									return new BasicRes(ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getCode(),
+//											ResMessage.ANSWER_OPTIONS_IS_NOT_MATCH.getMessage());
+//								}
+//								if (!item.isNecessary() && StringUtils.hasText(str) && !optionList.contains(str)) {
+//									return new BasicRes(ResMessage.IS_NOT_MATCH.getCode(),
+//											ResMessage.IS_NOT_MATCH.getMessage());
+//								}
+//							}
+						}else if (!item.isNecessary() && StringUtils.hasText(ans.getAnswer())) {
+	                        // 非必填的文本类型问题不进行选项匹配检查
+	                        System.out.println("非必填文本问题的答案: " + ans.getAnswer());
+	                    }
 
 						Fillin fillin = new Fillin();
 						fillin.setqId(ans.getqId());
@@ -214,7 +244,7 @@ public class FillinServiceImpl implements FillinServic {
 			return new BasicRes(ResMessage.PARAM_EMAIL_IS_REQUIRED.getCode(),
 					ResMessage.PARAM_EMAIL_IS_REQUIRED.getMessage());
 		}
-		if (req.getAge() < 12 || req.getAge() > 99) {
+		if (req.getAge() < 0 || req.getAge() > 99) {
 			return new BasicRes(ResMessage.PARAM_AGE_NOT_QUALIFIED.getCode(),
 					ResMessage.PARAM_AGE_NOT_QUALIFIED.getMessage());
 		}
@@ -252,10 +282,12 @@ public class FillinServiceImpl implements FillinServic {
 		// 建立一個新的hasMap,用來放置我的<題目編號,<問題選項,計算次數>>
 		Map<Integer, Map<String, Integer>> ansStatistics = new HashMap<>();
 
-		//放置 :當條件為文件時，顯示所有填寫的資料(顯示:題目號碼、題目、答案)
-		List<FeedbackText> feedbackText=new ArrayList<FeedbackText>();
-		//    題號     題目
-		Map<Integer, String> textStatistics=new HashMap<>();
+		//文字統計<題目編號,<文字答案>>
+		Map<Integer, List<String>> textStatistics = new HashMap<>();
+//		//放置 :當條件為文件時，顯示所有填寫的資料(顯示:題目號碼、題目、答案)
+//		List<FeedbackText> feedbackText=new ArrayList<FeedbackText>();
+//		//    題號     題目
+//		Map<Integer, String> textStatistics=new HashMap<>();
 
 		// 在問卷中抓取我的填答資訊
 		for (Response item : responseList) {
@@ -265,92 +297,153 @@ public class FillinServiceImpl implements FillinServic {
 				});
 
 				
-				for (Fillin fillin : fillStrList) {
-					//   題目    答案統計 
-					Map<String, Integer> quAndCount = new HashMap<>();
-					//1、先提取出選項
-					String optionStr = fillin.getQuestion();
-					//1.1 將選項用";"去除
-					String[] optionArray = optionStr.split(";");
-					//2、再提取出答案
-					String answer = fillin.getAnswer();
-					//將答案的前後都加上";"
-					answer = ";" + answer + ";";
-					//開始進行計算
-					for (String option : optionArray) {
-						if(fillin.getType().equals(OptionType.TEXT.getType())) {
-							textStatistics.put(fillin.getqId(), fillin.getQuestion());
-							FeedbackText textResult=new FeedbackText();
-							textResult.setTextStatistics(textStatistics);
-							textResult.setTextStat(fillin.getAnswer());
-							feedbackText.add(textResult);
-						}else {
-							String newoption = ";" + option + ";";
-							int oldAnswerStr = answer.length();
-							int newAnswerStr = answer.replace(newoption, "").length();
-							int statTotal = (oldAnswerStr - newAnswerStr) / newoption.length();
-							
-							// 
-							quAndCount = ansStatistics.getOrDefault(fillin.getqId(), quAndCount);
-	
-							int oldCount = quAndCount.getOrDefault(option, 0);
-							quAndCount.put(option, oldCount + statTotal);
-							ansStatistics.put(fillin.getqId(), quAndCount);
-							
-						}
-						
-					}
-					
-					
-					
-//					// 題取出選項
-////					String optionStr = fillin.getQuestion();
-////					String[] optionArray = optionStr.split(";");
-//					// 題取出答案
-//					String answer = fillin.getAnswer();
-//					// 將答案前後都加上";"
-//					answer = ";" + answer + ";";
-//					// 比對答案與選項
-//					// 把題目當作目標，來篩選答案出現次數
-//					// 為了避免每個選項是另一個答案的其中一個部分(例如: "綠茶"與"綠茶拿鐵")
-//					// 所以我們可以將每個選項的前後都加上一個;(分號)(變成 ;綠茶;綠茶拿鐵; 原本 綠茶;綠茶拿鐵)
-////					List<String> totalAns=new ArrayList<String>();
-////					statResults.clear();
-//					// 答案的統計計算放入地方
-//					List<StatResults> statResults = new ArrayList<StatResults>();
-//					statResults.clear();
-//					for (String option : quOptionList) {
-//						
-//						// 串分號
-//						String newoption = ";" + option + ";";
-//						int oldAnswerStr = answer.length();
-//						int newAnswerStr = answer.replace(newoption, "").length();
-//						int statTotal = (oldAnswerStr - newAnswerStr) / newoption.length();
-//
-//						
-//						StatResults results = new StatResults();
-//						results.setOptionItem(option);
-//						results.setCount(statTotal);
-//
-//						statResults.add(results);
-//					}
+				 for (Fillin fillin : fillStrList) {
+					 if(fillin.getType().equals(OptionType.TEXT.getType())) {
+						 textStatistics.computeIfAbsent(fillin.getqId(), k -> new ArrayList<>())
+                         .add(fillin.getAnswer());
+					 }else {
+					 //    <題目,統計數量>
+		                Map<String, Integer> quAndCount = new HashMap<>();
+		                String optionStr = fillin.getQuestion();
+		                String[] optionArray = optionStr.split(";");
+		                String answer = fillin.getAnswer();
+		                answer = ";" + answer + ";";
 
-//					Statistics statis = new Statistics();
-//					statis.setqId(item.getQuizId());
-//					statis.setTopic(fillin.getTitle());//
-//					statis.setOptions(fillin.getQuestion());
-////					statis.setAnsStatistics(ansStatistics);
-//					statistics.add(statis);//
+		                for (String option : optionArray) {
+//		                    if (fillin.getType().equals(OptionType.TEXT.getType())) {
+//		                        textStatistics.computeIfAbsent(fillin.getqId(), k -> new ArrayList<>())
+//		                                      .add(fillin.getAnswer());
+//		                    } else {
+		                        String newoption = ";" + option + ";";
+		                        int oldAnswerStr = answer.length();
+		                        int newAnswerStr = answer.replace(newoption, "").length();
+		                        int statTotal = (oldAnswerStr - newAnswerStr) / newoption.length();
 
-				}
+		                        quAndCount = ansStatistics.getOrDefault(fillin.getqId(), quAndCount);
+		                        int oldCount = quAndCount.getOrDefault(option, 0);
+		                        quAndCount.put(option, oldCount + statTotal);
+		                        ansStatistics.put(fillin.getqId(), quAndCount);
+		                    }
+		                }
+		            }
+		        } catch (JsonProcessingException e) {
+		            return new StatisticsRes(ResMessage.JSON_PROCESSING_EXCEPTION.getCode(),
+		                    ResMessage.JSON_PROCESSING_EXCEPTION.getMessage());
+		        }
+		    }
 
-			} catch (JsonProcessingException e) {
-				return new StatisticsRes(ResMessage.JSON_PROCESSING_EXCEPTION.getCode(),
-						ResMessage.JSON_PROCESSING_EXCEPTION.getMessage());
-			}
+//		    List<FeedbackText> feedbackText = textStatistics.entrySet().stream()
+//		            .map(entry -> {
+//		                FeedbackText textResult = new FeedbackText();
+//		                Map<Integer, List<String>> textMap = new HashMap<>();
+//		                textMap.put(entry.getKey(), entry.getValue());
+//		                textResult.setTextStatistics(textMap);
+//		                return textResult;
+//		            })
+//		            .collect(Collectors.toList());
+
+		    return new StatisticsRes(ResMessage.SUCCESS.getCode(), ResMessage.SUCCESS.getMessage(), //
+		            quizId, name, startdate, enddate, ansStatistics, textStatistics);
 		}
-
-		return new StatisticsRes(ResMessage.SUCCESS.getCode(), ResMessage.SUCCESS.getMessage(),//
-				quizId,name, startdate,enddate, ansStatistics,feedbackText);
-	}
+				
+				
+//				for (Fillin fillin : fillStrList) {
+//					//   題目    答案統計 
+//					Map<String, Integer> quAndCount = new HashMap<>();
+//					//1、先提取出選項
+//					String optionStr = fillin.getQuestion();
+//					//1.1 將選項用";"去除
+//					String[] optionArray = optionStr.split(";");
+//					//2、再提取出答案
+//					String answer = fillin.getAnswer();
+//					//將答案的前後都加上";"
+//					answer = ";" + answer + ";";
+//					//開始進行計算
+//					for (String option : optionArray) {
+//						if(fillin.getType().equals(OptionType.TEXT.getType())) {
+////							FeedbackText textResult=new FeedbackText();
+////							textStatistics.put(fillin.getqId(), fillin.getQuestion());
+////							textResult.setTextStatistics(textStatistics);
+////							textResult.setTextStat(fillin.getAnswer());
+////							feedbackText.add(textResult);
+//							textStatistics.computeIfAbsent(fillin.getqId(), k -> //
+//							new ArrayList<>()//
+//							).add(fillin.getAnswer());
+//						}else {
+//							String newoption = ";" + option + ";";
+//							int oldAnswerStr = answer.length();
+//							int newAnswerStr = answer.replace(newoption, "").length();
+//							int statTotal = (oldAnswerStr - newAnswerStr) / newoption.length();
+//							
+//							// 
+//							quAndCount = ansStatistics.getOrDefault(fillin.getqId(), quAndCount);
+//	
+//							int oldCount = quAndCount.getOrDefault(option, 0);
+//							quAndCount.put(option, oldCount + statTotal);
+//							ansStatistics.put(fillin.getqId(), quAndCount);
+//							
+//						}
+//						
+//					}
+//					
+//					
+//					
+////					// 題取出選項
+//////					String optionStr = fillin.getQuestion();
+//////					String[] optionArray = optionStr.split(";");
+////					// 題取出答案
+////					String answer = fillin.getAnswer();
+////					// 將答案前後都加上";"
+////					answer = ";" + answer + ";";
+////					// 比對答案與選項
+////					// 把題目當作目標，來篩選答案出現次數
+////					// 為了避免每個選項是另一個答案的其中一個部分(例如: "綠茶"與"綠茶拿鐵")
+////					// 所以我們可以將每個選項的前後都加上一個;(分號)(變成 ;綠茶;綠茶拿鐵; 原本 綠茶;綠茶拿鐵)
+//////					List<String> totalAns=new ArrayList<String>();
+//////					statResults.clear();
+////					// 答案的統計計算放入地方
+////					List<StatResults> statResults = new ArrayList<StatResults>();
+////					statResults.clear();
+////					for (String option : quOptionList) {
+////						
+////						// 串分號
+////						String newoption = ";" + option + ";";
+////						int oldAnswerStr = answer.length();
+////						int newAnswerStr = answer.replace(newoption, "").length();
+////						int statTotal = (oldAnswerStr - newAnswerStr) / newoption.length();
+////
+////						
+////						StatResults results = new StatResults();
+////						results.setOptionItem(option);
+////						results.setCount(statTotal);
+////
+////						statResults.add(results);
+////					}
+//
+////					Statistics statis = new Statistics();
+////					statis.setqId(item.getQuizId());
+////					statis.setTopic(fillin.getTitle());//
+////					statis.setOptions(fillin.getQuestion());
+//////					statis.setAnsStatistics(ansStatistics);
+////					statistics.add(statis);//
+//
+//				}
+//
+//			} catch (JsonProcessingException e) {
+//				return new StatisticsRes(ResMessage.JSON_PROCESSING_EXCEPTION.getCode(),
+//						ResMessage.JSON_PROCESSING_EXCEPTION.getMessage());
+//			}
+//		}
+//		
+//		List<FeedbackText> feedbackText = textStatistics.entrySet().stream()
+//	            .map(entry -> {
+//	                FeedbackText textResult = new FeedbackText();
+//	                textResult.setTextStatistics(Map.of(entry.getKey(), entry.getValue().toString()));
+//	                return textResult;
+//	            })
+//	            .collect(Collectors.toList());
+//
+//		return new StatisticsRes(ResMessage.SUCCESS.getCode(), ResMessage.SUCCESS.getMessage(),//
+//				quizId,name, startdate,enddate, ansStatistics,feedbackText);
+//	}
 }

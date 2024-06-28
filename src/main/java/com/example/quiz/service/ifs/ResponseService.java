@@ -4,6 +4,8 @@ import com.example.quiz.vo.BasicRes;
 import com.example.quiz.vo.FeedbackReq;
 import com.example.quiz.vo.FeedbackRes;
 import com.example.quiz.vo.FillinReq;
+import com.example.quiz.vo.ResponseReq;
+import com.example.quiz.vo.ResponseRes;
 import com.example.quiz.vo.TextReq;
 import com.example.quiz.vo.TextRes;
 
@@ -13,6 +15,8 @@ public interface ResponseService {
 	
 	public FeedbackRes feedback(FeedbackReq req);
 	
-	public TextRes text(TextReq req);
+//	public TextRes text(TextReq req);
+	
+	public ResponseRes res(ResponseReq req);
 	
 }
