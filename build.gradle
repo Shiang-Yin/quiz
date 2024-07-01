@@ -20,6 +20,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	
+	
 	//mysql connector
 	implementation 'mysql:mysql-connector-java:8.0.31'
 	//Hot Deployment :專案啟動中，若有修改資訊，它會自動幫我們重新啟動更新
@@ -28,6 +29,13 @@ dependencies {
     //implementation 'io.springfox:springfox-boot-starter:3.0.0'
     //springdoc openapi maven(open API)與上面那一個擇一使用，不然會有衝突
     implementation 'org.springdoc:springdoc-openapi-ui:1.8.0'
+    
+    //(cache二擇一)
+    //spring cache
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	//caffeine cache
+	implementation 'com.github.ben-manes.caffeine:caffeine'
+    
     //validation資料驗證
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     

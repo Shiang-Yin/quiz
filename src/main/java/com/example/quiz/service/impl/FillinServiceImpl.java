@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -254,6 +255,12 @@ public class FillinServiceImpl implements FillinServic {
 
 //	============================================================================
 
+	//cacheNames(或是value)的名稱自訂義
+	//key等號後面的字串，要使用關鍵字# 為開頭，後面接續著方法的變數名稱(要完全一樣)
+	//若要取得變數名稱裡的屬性名稱  .屬性名稱
+	//unless:排除，可根據方法的回傳結果(用#result 表示)來決定是否將結果保存
+	//unless="#result.feedbackList.size<=0"  :表示 "排除" 了feedbackList為空list，其餘結果會暫存
+	@Cacheable(cacheNames = "feedback",key="#req.quizId",unless  = "#result.feedbackList.size<=0")
 	@Override
 	public FeedbackRes feedback(FeedbackReq req) {
 		// TODO Auto-generated method stub

@@ -3,6 +3,7 @@ package com.example.quiz.service.impl;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -168,6 +169,14 @@ public class QuizServiceImpl implements QuizService{
 
 //	=================================================================
 // *****************進***********入***********搜*********索******************
+	//因為startDate不是字串格式他是(時間格式)所以
+	//(1)要轉成字串(2)到req給他們時間定義上(如下的null=LocalDate.of(1970, 1, 1))
+	//key若皆多個參數時，不能直接用"#req.name"+"#req.startDate.toString()" 必須要用.concat
+	//.concat 也可以用來接字串特殊符號，例如 - 或 _ ，但必須要用 '單引號' 將其包起來;
+	//startDate和endDate非資料型態的字串，所以要用toString()轉換才能用concat串接
+	//concat "不"支援 concat("#req.name","-",""#req.startDate.toString()") 此寫法
+	@Cacheable(cacheNames = "quiz_search",key="#req.name.concat("
+			+ " #req.startDate.toString()).concat(#req.endDate.toString())")
 	@Override
 	public SearchRes search(SearchReq req) {
 		
